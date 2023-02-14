@@ -1,9 +1,18 @@
 const canvas = document.querySelector<HTMLCanvasElement>('#canvas')
 const textarea = document.querySelector<HTMLInputElement>('#textarea')
-const info = document.querySelector<HTMLDivElement>('#info')
 
-const fs = 20
+const sizeInput = document.querySelector<HTMLInputElement>('#input-size')
+
+const inputX = document.querySelector<HTMLInputElement>('#input-x')
+const inputY = document.querySelector<HTMLInputElement>('#input-y')
+
+const initFs = 20
 const ff = 'sans-serif'
+const dpr = window.devicePixelRatio
+const initRefX = 20
+const initRefY = 50
+const w = 400
+const h = 400
 
 if (canvas) {
   const ctx = canvas.getContext('2d')
@@ -12,18 +21,30 @@ if (canvas) {
     throw new Error('ctx died')
   }
 
-  if (!textarea) {
+  if (!textarea || !sizeInput || !inputX || !inputY) {
     throw new Error('dom el missing')
   }
 
-  const refX = 50
-  const refY = 50
+  let fs = initFs
+  let text = textarea.value
+  let refXPerc = initRefX
+  let refYPerc = initRefY
 
-  const w = ctx.canvas.width
-  const h = ctx.canvas.height
-  const text = textarea.value
+  ctx.canvas.style.width = `${w}px`
+  ctx.canvas.style.height = `${h}px`
+  ctx.canvas.width = w * dpr
+  ctx.canvas.height = h * dpr
 
-  const draw = (text: string) => {
+  const init = () => {
+    ctx.scale(dpr, dpr)
+  }
+
+  const draw = () => {
+    let refX = (refXPerc / 100) * w
+    let refY = (refYPerc / 100) * h
+
+    console.log(refX, refY)
+
     ctx.clearRect(0, 0, w, h)
     ctx.font = `${fs}px ${ff}`
 
@@ -36,22 +57,22 @@ if (canvas) {
     // h
 
     // baseline
-    aPath.moveTo(0, refX)
-    aPath.lineTo(w, refX)
+    aPath.moveTo(0, refY)
+    aPath.lineTo(w, refY)
 
-    aPath.moveTo(0, refX - metrics.actualBoundingBoxAscent)
-    aPath.lineTo(w, refX - metrics.actualBoundingBoxAscent)
-    aPath.moveTo(0, refX + metrics.actualBoundingBoxDescent)
-    aPath.lineTo(w, refX + metrics.actualBoundingBoxDescent)
+    aPath.moveTo(0, refY - metrics.actualBoundingBoxAscent)
+    aPath.lineTo(w, refY - metrics.actualBoundingBoxAscent)
+    aPath.moveTo(0, refY + metrics.actualBoundingBoxDescent)
+    aPath.lineTo(w, refY + metrics.actualBoundingBoxDescent)
 
     // v
-    aPath.moveTo(refY, 0)
-    aPath.lineTo(refY, h)
+    aPath.moveTo(refX, 0)
+    aPath.lineTo(refX, h)
 
-    aPath.moveTo(refY - metrics.actualBoundingBoxLeft, 0) // this can return negative for left-aligned text
-    aPath.lineTo(refY - metrics.actualBoundingBoxLeft, h)
-    aPath.moveTo(refY + metrics.actualBoundingBoxRight, 0)
-    aPath.lineTo(refY + metrics.actualBoundingBoxRight, h)
+    aPath.moveTo(refX - metrics.actualBoundingBoxLeft, 0) // this can return negative for left-aligned text
+    aPath.lineTo(refX - metrics.actualBoundingBoxLeft, h)
+    aPath.moveTo(refX + metrics.actualBoundingBoxRight, 0)
+    aPath.lineTo(refX + metrics.actualBoundingBoxRight, h)
 
     ctx.strokeStyle = 'rgb(0,0,0)'
     ctx.stroke(aPath)
@@ -67,8 +88,29 @@ if (canvas) {
     ctx.stroke(fPath)
   }
 
-  textarea.addEventListener<'input'>('input', (ev) =>
-    draw((ev.target as HTMLInputElement).value || ''),
-  )
-  draw(text)
+  textarea.addEventListener<'input'>('input', (ev) => {
+    const value = (ev.target as HTMLInputElement).value
+    text = value
+    draw()
+  })
+
+  sizeInput.addEventListener('input', (ev) => {
+    const value = (ev.target as HTMLInputElement).value
+    fs = parseInt(value) || initFs
+    draw()
+  })
+
+  inputX.addEventListener('input', (ev) => {
+    const value = (ev.target as HTMLInputElement).value
+    refXPerc = parseInt(value) ?? initRefX
+    draw()
+  })
+  inputY.addEventListener('input', (ev) => {
+    const value = (ev.target as HTMLInputElement).value
+    refYPerc = parseInt(value) ?? initRefY
+    draw()
+  })
+
+  init()
+  draw()
 }

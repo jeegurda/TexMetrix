@@ -3,10 +3,102 @@
   <head>
     <title>TexMetrix</title>
     <script defer src="./js/compiled.js"></script>
+    <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
-    <textarea name="" id="textarea" cols="30" rows="10">jee</textarea>
-    <canvas id="canvas"></canvas>
-    <div id="info"></div>
+    <div class="layout">
+      <textarea id="textarea" cols="30" rows="10" autofocus>jee</textarea>
+      <canvas id="canvas"></canvas>
+      <div id="controls">
+        <div>
+          <p><strong>Font-size</strong></p>
+          <input
+            type="range"
+            min="6"
+            max="100"
+            value="20"
+            id="input-size"
+            step="1"
+          />
+        </div>
+        <div>
+          <p><strong>Align</strong></p>
+          <label>
+            <input
+              type="radio"
+              name="input-align"
+              class="input-align"
+              value="left"
+            />
+            left
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="input-align"
+              class="input-align"
+              value="center"
+              checked
+            />
+            center
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="input-align"
+              class="input-align"
+              value="right"
+            />
+            right
+          </label>
+        </div>
+        <div>
+          <p><strong>Baseline</strong></p>
+          <label>
+            <input type="radio" name="input-baseline" value="top" />
+            top
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="input-baseline"
+              value="baseline"
+              checked
+            />
+            baseline
+          </label>
+          <label>
+            <input type="radio" name="input-baseline" value="bottom" />
+            right
+          </label>
+        </div>
+        <div>
+          <p><strong>Position</strong></p>
+          <label>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value="20"
+              id="input-x"
+              step="1"
+            />
+            x
+          </label>
+          <br />
+          <label>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value="50"
+              id="input-y"
+              step="1"
+            />
+            y
+          </label>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
