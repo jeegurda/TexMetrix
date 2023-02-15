@@ -1,3 +1,5 @@
+import { checkTMInterface } from './support'
+
 const canvas = document.querySelector<HTMLCanvasElement>('#canvas')
 const textarea = document.querySelector<HTMLInputElement>('#textarea')
 
@@ -98,6 +100,7 @@ if (canvas) {
     const value = (ev.target as HTMLInputElement).value
     fs = parseInt(value) || initFs
     draw()
+    12
   })
 
   inputX.addEventListener('input', (ev) => {
@@ -114,3 +117,5 @@ if (canvas) {
   init()
   draw()
 }
+
+checkTMInterface()

@@ -2,6 +2,6 @@
   "compilerOptions": {
     "strict": true,
     "target": "ES6",
-    "outFile": "./build/js/compiled.js"
+    "noEmit": true
   }
 }
