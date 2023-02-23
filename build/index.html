@@ -16,8 +16,8 @@
           <input
             type="range"
             min="6"
-            max="100"
-            value="20"
+            max="200"
+            value="60"
             id="input-size"
             step="1"
           />
@@ -29,9 +29,10 @@
               type="radio"
               name="input-align"
               class="input-align"
-              value="left"
+              value="start"
+              checked
             />
-            left
+            start
           </label>
           <label>
             <input
@@ -39,7 +40,6 @@
               name="input-align"
               class="input-align"
               value="center"
-              checked
             />
             center
           </label>
@@ -48,29 +48,67 @@
               type="radio"
               name="input-align"
               class="input-align"
-              value="right"
+              value="end"
             />
-            right
+            end
           </label>
         </div>
         <div>
           <p><strong>Baseline</strong></p>
           <label>
-            <input type="radio" name="input-baseline" value="top" />
+            <input
+              type="radio"
+              name="input-baseline"
+              class="input-baseline"
+              value="top"
+            />
             top
           </label>
           <label>
             <input
               type="radio"
               name="input-baseline"
-              value="baseline"
+              class="input-baseline"
+              value="alphabetic"
               checked
             />
-            baseline
+            alphabetic
           </label>
           <label>
-            <input type="radio" name="input-baseline" value="bottom" />
-            right
+            <input
+              type="radio"
+              name="input-baseline"
+              class="input-baseline"
+              value="bottom"
+            />
+            bottom
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="input-baseline"
+              class="input-baseline"
+              value="hanging"
+            />
+            hanging
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="input-baseline"
+              class="input-baseline"
+              value="ideographic"
+            />
+            ideographic
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="input-baseline"
+              class="input-baseline"
+              value="middle"
+            />
+            middle
           </label>
         </div>
         <div>
@@ -80,7 +118,7 @@
               type="range"
               min="0"
               max="100"
-              value="20"
+              value="40"
               id="input-x"
               step="1"
             />

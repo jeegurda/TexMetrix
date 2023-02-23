@@ -1,4 +1,5 @@
 import { checkTMInterface } from './support'
+import { Align, Baseline } from './types'
 
 const canvas = document.querySelector<HTMLCanvasElement>('#canvas')
 const textarea = document.querySelector<HTMLInputElement>('#textarea')
@@ -8,13 +9,19 @@ const sizeInput = document.querySelector<HTMLInputElement>('#input-size')
 const inputX = document.querySelector<HTMLInputElement>('#input-x')
 const inputY = document.querySelector<HTMLInputElement>('#input-y')
 
-const initFs = 20
+const alignInputs = document.querySelectorAll<HTMLInputElement>('.input-align')
+const baselineInputs =
+  document.querySelectorAll<HTMLInputElement>('.input-baseline')
+
+const initFs = 60
 const ff = 'sans-serif'
 const dpr = window.devicePixelRatio
 const initRefX = 20
 const initRefY = 50
-const w = 400
+const w = 800
 const h = 400
+const initAlign = 'start'
+const initBaseline = 'alphabetic'
 
 if (canvas) {
   const ctx = canvas.getContext('2d')
@@ -32,6 +39,9 @@ if (canvas) {
   let refXPerc = initRefX
   let refYPerc = initRefY
 
+  let baseline: Baseline = initBaseline
+  let align: Align = initAlign
+
   ctx.canvas.style.width = `${w}px`
   ctx.canvas.style.height = `${h}px`
   ctx.canvas.width = w * dpr
@@ -45,7 +55,8 @@ if (canvas) {
     let refX = (refXPerc / 100) * w
     let refY = (refYPerc / 100) * h
 
-    console.log(refX, refY)
+    ctx.textAlign = align
+    ctx.textBaseline = baseline
 
     ctx.clearRect(0, 0, w, h)
     ctx.font = `${fs}px ${ff}`
@@ -54,33 +65,39 @@ if (canvas) {
 
     ctx.fillText(text, refX, refY)
 
-    const aPath = new Path2D()
-
-    // h
+    const blAlignPath = new Path2D()
 
     // baseline
-    aPath.moveTo(0, refY)
-    aPath.lineTo(w, refY)
+    blAlignPath.moveTo(0, refY)
+    blAlignPath.lineTo(w, refY)
 
-    aPath.moveTo(0, refY - metrics.actualBoundingBoxAscent)
-    aPath.lineTo(w, refY - metrics.actualBoundingBoxAscent)
-    aPath.moveTo(0, refY + metrics.actualBoundingBoxDescent)
-    aPath.lineTo(w, refY + metrics.actualBoundingBoxDescent)
+    // align
+    blAlignPath.moveTo(refX, 0)
+    blAlignPath.lineTo(refX, h)
 
-    // v
-    aPath.moveTo(refX, 0)
-    aPath.lineTo(refX, h)
+    ctx.strokeStyle = 'rgb(200,0,200)'
+    ctx.stroke(blAlignPath)
 
-    aPath.moveTo(refX - metrics.actualBoundingBoxLeft, 0) // this can return negative for left-aligned text
-    aPath.lineTo(refX - metrics.actualBoundingBoxLeft, h)
-    aPath.moveTo(refX + metrics.actualBoundingBoxRight, 0)
-    aPath.lineTo(refX + metrics.actualBoundingBoxRight, h)
+    const bbPath = new Path2D()
+
+    // h bb
+    bbPath.moveTo(0, refY - metrics.actualBoundingBoxAscent)
+    bbPath.lineTo(w, refY - metrics.actualBoundingBoxAscent)
+    bbPath.moveTo(0, refY + metrics.actualBoundingBoxDescent)
+    bbPath.lineTo(w, refY + metrics.actualBoundingBoxDescent)
+
+    // v bb
+    bbPath.moveTo(refX - metrics.actualBoundingBoxLeft, 0) // this can return negative for left-aligned text
+    bbPath.lineTo(refX - metrics.actualBoundingBoxLeft, h)
+    bbPath.moveTo(refX + metrics.actualBoundingBoxRight, 0)
+    bbPath.lineTo(refX + metrics.actualBoundingBoxRight, h)
 
     ctx.strokeStyle = 'rgb(0,0,0)'
-    ctx.stroke(aPath)
+    ctx.stroke(bbPath)
 
     const fPath = new Path2D()
 
+    // font bb
     fPath.moveTo(0, refY - metrics.fontBoundingBoxAscent)
     fPath.lineTo(w, refY - metrics.fontBoundingBoxAscent)
     fPath.moveTo(0, refY + metrics.fontBoundingBoxDescent)
@@ -100,7 +117,6 @@ if (canvas) {
     const value = (ev.target as HTMLInputElement).value
     fs = parseInt(value) || initFs
     draw()
-    12
   })
 
   inputX.addEventListener('input', (ev) => {
@@ -113,6 +129,21 @@ if (canvas) {
     refYPerc = parseInt(value) ?? initRefY
     draw()
   })
+
+  Array.from(alignInputs).forEach((input) =>
+    input.addEventListener('change', (ev) => {
+      const value = (ev.target as HTMLInputElement).value as Align
+      align = value
+      draw()
+    }),
+  )
+  Array.from(baselineInputs).forEach((input) =>
+    input.addEventListener('change', (ev) => {
+      const value = (ev.target as HTMLInputElement).value as Baseline
+      baseline = value
+      draw()
+    }),
+  )
 
   init()
   draw()
