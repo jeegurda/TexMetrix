@@ -1,4 +1,4 @@
-export type Align = 'left' | 'right' | 'center'
+export type Align = 'start' | 'right' | 'end'
 
 export type Baseline =
   | 'alphabetic'
