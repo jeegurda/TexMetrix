@@ -1,11 +1,11 @@
 {
   "name": "texmetrix",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
-  "main": "index.ts",
+  "main": "src/index.ts",
   "scripts": {
-    "build": "esbuild index.ts --bundle --outfile=build/js/bundle.js --sourcemap=linked --minify",
-    "serve": "esbuild index.ts --bundle --outfile=build/js/bundle.js --sourcemap=linked --serve --servedir=build"
+    "build": "esbuild src/index.ts --bundle --outfile=build/js/bundle.js --sourcemap=linked --minify",
+    "serve": "esbuild src/index.ts --bundle --outfile=build/js/bundle.js --sourcemap=linked --serve --servedir=build"
   },
   "author": "",
   "license": "ISC",
