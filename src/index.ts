@@ -3,12 +3,9 @@ import { Align, Baseline } from './types'
 
 const canvas = document.querySelector<HTMLCanvasElement>('#canvas')
 const textarea = document.querySelector<HTMLInputElement>('#textarea')
-
 const sizeInput = document.querySelector<HTMLInputElement>('#input-size')
-
 const inputX = document.querySelector<HTMLInputElement>('#input-x')
 const inputY = document.querySelector<HTMLInputElement>('#input-y')
-
 const alignInputs = document.querySelectorAll<HTMLInputElement>('.input-align')
 const baselineInputs =
   document.querySelectorAll<HTMLInputElement>('.input-baseline')
