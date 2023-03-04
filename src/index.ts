@@ -1,14 +1,6 @@
 import { checkTMInterface } from './support'
 import { Align, Baseline } from './types'
-
-const canvas = document.querySelector<HTMLCanvasElement>('#canvas')
-const textarea = document.querySelector<HTMLInputElement>('#textarea')
-const sizeInput = document.querySelector<HTMLInputElement>('#input-size')
-const inputX = document.querySelector<HTMLInputElement>('#input-x')
-const inputY = document.querySelector<HTMLInputElement>('#input-y')
-const alignInputs = document.querySelectorAll<HTMLInputElement>('.input-align')
-const baselineInputs =
-  document.querySelectorAll<HTMLInputElement>('.input-baseline')
+import * as dom from './dom'
 
 const initFs = 60
 const ff = 'sans-serif'
@@ -20,19 +12,19 @@ const h = 400
 const initAlign = 'start'
 const initBaseline = 'alphabetic'
 
-if (canvas) {
-  const ctx = canvas.getContext('2d')
+if (dom.canvas) {
+  const ctx = dom.canvas.getContext('2d')
 
   if (ctx === null) {
     throw new Error('ctx died')
   }
 
-  if (!textarea || !sizeInput || !inputX || !inputY) {
+  if (!dom.textarea || !dom.sizeInput || !dom.inputX || !dom.inputY) {
     throw new Error('dom el missing')
   }
 
   let fs = initFs
-  let text = textarea.value
+  let text = dom.textarea.value
   let refXPerc = initRefX
   let refYPerc = initRefY
 
@@ -104,37 +96,37 @@ if (canvas) {
     ctx.stroke(fPath)
   }
 
-  textarea.addEventListener<'input'>('input', (ev) => {
+  dom.textarea.addEventListener<'input'>('input', (ev) => {
     const value = (ev.target as HTMLInputElement).value
     text = value
     draw()
   })
 
-  sizeInput.addEventListener('input', (ev) => {
+  dom.sizeInput.addEventListener('input', (ev) => {
     const value = (ev.target as HTMLInputElement).value
     fs = parseInt(value) || initFs
     draw()
   })
 
-  inputX.addEventListener('input', (ev) => {
+  dom.inputX.addEventListener('input', (ev) => {
     const value = (ev.target as HTMLInputElement).value
     refXPerc = parseInt(value) ?? initRefX
     draw()
   })
-  inputY.addEventListener('input', (ev) => {
+  dom.inputY.addEventListener('input', (ev) => {
     const value = (ev.target as HTMLInputElement).value
     refYPerc = parseInt(value) ?? initRefY
     draw()
   })
 
-  Array.from(alignInputs).forEach((input) =>
+  Array.from(dom.alignInputs).forEach((input) =>
     input.addEventListener('change', (ev) => {
       const value = (ev.target as HTMLInputElement).value as Align
       align = value
       draw()
     }),
   )
-  Array.from(baselineInputs).forEach((input) =>
+  Array.from(dom.baselineInputs).forEach((input) =>
     input.addEventListener('change', (ev) => {
       const value = (ev.target as HTMLInputElement).value as Baseline
       baseline = value
