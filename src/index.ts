@@ -3,17 +3,9 @@ import { Align, Baseline } from './types'
 import * as dom from './dom'
 import './style.css'
 
-const initFs = 60
 const ff = 'sans-serif'
-const dpr = window.devicePixelRatio
-const initRefX = 20
-const initRefY = 50
-const w = 800
-const h = 400
-const initAlign = 'start'
-const initBaseline = 'alphabetic'
 
-if (!dom.canvas || !dom.textInput || !dom.fontSizeInput) {
+if (!dom.canvas || !dom.textInput || !dom.fontSizeInput || !dom.dprInput) {
   throw new Error('dom el missing')
 }
 
@@ -23,33 +15,36 @@ if (ctx === null) {
   throw new Error('ctx died')
 }
 
-let fs = initFs
 let text = 'jee'
-let refXPerc = initRefX
-let refYPerc = initRefY
+let fs = 60
+let baseline: Baseline = 'alphabetic'
+let align: Align = 'start'
+let dpr = window.devicePixelRatio
 
-let baseline: Baseline = initBaseline
-let align: Align = initAlign
+let rw = 0
+let rh = 0
 
-ctx.canvas.style.width = `${w}px`
-ctx.canvas.style.height = `${h}px`
-ctx.canvas.width = w * dpr
-ctx.canvas.height = h * dpr
+const resizeCanvas = () => {
+  rw = ctx.canvas.clientWidth * dpr
+  rh = ctx.canvas.clientHeight * dpr
 
-dom.textInput.value = text
+  ctx.canvas.width = rw
+  ctx.canvas.height = rh
+}
 
 const init = () => {
+  resizeCanvas()
   ctx.scale(dpr, dpr)
 }
 
 const draw = () => {
-  let refX = (refXPerc / 100) * w
-  let refY = (refYPerc / 100) * h
+  let refX = 100
+  let refY = 100
 
   ctx.textAlign = align
   ctx.textBaseline = baseline
 
-  ctx.clearRect(0, 0, w, h)
+  ctx.clearRect(0, 0, rw, rh)
   ctx.font = `${fs}px ${ff}`
 
   const metrics = ctx.measureText(text)
@@ -60,11 +55,11 @@ const draw = () => {
 
   // baseline
   blAlignPath.moveTo(0, refY)
-  blAlignPath.lineTo(w, refY)
+  blAlignPath.lineTo(rw, refY)
 
   // align
   blAlignPath.moveTo(refX, 0)
-  blAlignPath.lineTo(refX, h)
+  blAlignPath.lineTo(refX, rh)
 
   ctx.strokeStyle = 'rgb(200,0,200)'
   ctx.stroke(blAlignPath)
@@ -73,15 +68,15 @@ const draw = () => {
 
   // h bb
   bbPath.moveTo(0, refY - metrics.actualBoundingBoxAscent)
-  bbPath.lineTo(w, refY - metrics.actualBoundingBoxAscent)
+  bbPath.lineTo(rw, refY - metrics.actualBoundingBoxAscent)
   bbPath.moveTo(0, refY + metrics.actualBoundingBoxDescent)
-  bbPath.lineTo(w, refY + metrics.actualBoundingBoxDescent)
+  bbPath.lineTo(rw, refY + metrics.actualBoundingBoxDescent)
 
   // v bb
   bbPath.moveTo(refX - metrics.actualBoundingBoxLeft, 0) // this can return negative for left-aligned text
-  bbPath.lineTo(refX - metrics.actualBoundingBoxLeft, h)
+  bbPath.lineTo(refX - metrics.actualBoundingBoxLeft, rh)
   bbPath.moveTo(refX + metrics.actualBoundingBoxRight, 0)
-  bbPath.lineTo(refX + metrics.actualBoundingBoxRight, h)
+  bbPath.lineTo(refX + metrics.actualBoundingBoxRight, rh)
 
   ctx.strokeStyle = 'rgb(0,0,0)'
   ctx.stroke(bbPath)
@@ -90,40 +85,52 @@ const draw = () => {
 
   // font bb
   fPath.moveTo(0, refY - metrics.fontBoundingBoxAscent)
-  fPath.lineTo(w, refY - metrics.fontBoundingBoxAscent)
+  fPath.lineTo(rw, refY - metrics.fontBoundingBoxAscent)
   fPath.moveTo(0, refY + metrics.fontBoundingBoxDescent)
-  fPath.lineTo(w, refY + metrics.fontBoundingBoxDescent)
+  fPath.lineTo(rw, refY + metrics.fontBoundingBoxDescent)
 
   ctx.strokeStyle = 'rgb(240,0,0)'
   ctx.stroke(fPath)
 }
 
 dom.textInput.addEventListener<'input'>('input', (ev) => {
-  const value = (ev.target as HTMLInputElement).value
+  const value = (ev.target as HTMLTextAreaElement).value
   text = value
   draw()
 })
-
 dom.fontSizeInput.addEventListener('input', (ev) => {
   const value = (ev.target as HTMLInputElement).value
-  fs = parseInt(value) || initFs
+  fs = parseInt(value)
   draw()
 })
-
-Array.from(dom.alignInputs).forEach((input) =>
+Array.from(dom.alignInputs).forEach((input) => {
   input.addEventListener('change', (ev) => {
     const value = (ev.target as HTMLInputElement).value as Align
     align = value
     draw()
-  }),
-)
-Array.from(dom.baselineInputs).forEach((input) =>
+  })
+})
+Array.from(dom.baselineInputs).forEach((input) => {
   input.addEventListener('change', (ev) => {
     const value = (ev.target as HTMLInputElement).value as Baseline
     baseline = value
     draw()
-  }),
-)
+  })
+})
+dom.dprInput.addEventListener('input', (ev) => {
+  const value = Number((ev.target as HTMLInputElement).value)
+  dpr = value
+  init() // rescaling required
+  draw()
+})
+
+window.addEventListener('resize', () => {
+  init()
+  draw()
+})
+
+dom.textInput.value = text
+dom.dprInput.value = String(dpr)
 
 init()
 draw()
