@@ -3,32 +3,34 @@
   <head>
     <title>TexMetrix</title>
     <link rel="icon" href="./favicon.ico" />
-    <link rel="stylesheet" href="./style.css" />
-    <script defer src="./js/bundle.js"></script>
+    <link rel="stylesheet" href="./bundled/bundle.css" />
+    <script defer src="./bundled/bundle.js"></script>
   </head>
   <body>
     <div class="layout">
-      <textarea id="textarea" cols="30" rows="10" autofocus>jee</textarea>
-      <canvas id="canvas"></canvas>
-      <div id="controls">
+      <div class="text-parameters">
+        <div>Text</div>
         <div>
-          <p><strong>Font-size</strong></p>
+          <textarea class="text-input" autofocus rows="3"></textarea>
+        </div>
+        <div>Font-size</div>
+        <div>
           <input
             type="range"
             min="6"
             max="200"
             value="60"
-            id="input-size"
+            class="font-size-input"
             step="1"
           />
         </div>
+        <div>Align</div>
         <div>
-          <p><strong>Align</strong></p>
           <label>
             <input
               type="radio"
-              name="input-align"
-              class="input-align"
+              name="align-input"
+              class="align-input"
               value="start"
               checked
             />
@@ -37,8 +39,8 @@
           <label>
             <input
               type="radio"
-              name="input-align"
-              class="input-align"
+              name="align-input"
+              class="align-input"
               value="center"
             />
             center
@@ -46,20 +48,20 @@
           <label>
             <input
               type="radio"
-              name="input-align"
-              class="input-align"
+              name="align-input"
+              class="align-input"
               value="end"
             />
             end
           </label>
         </div>
+        <div>Baseline</div>
         <div>
-          <p><strong>Baseline</strong></p>
           <label>
             <input
               type="radio"
-              name="input-baseline"
-              class="input-baseline"
+              name="baseline-input"
+              class="baseline-input"
               value="top"
             />
             top
@@ -67,8 +69,8 @@
           <label>
             <input
               type="radio"
-              name="input-baseline"
-              class="input-baseline"
+              name="baseline-input"
+              class="baseline-input"
               value="alphabetic"
               checked
             />
@@ -77,8 +79,8 @@
           <label>
             <input
               type="radio"
-              name="input-baseline"
-              class="input-baseline"
+              name="baseline-input"
+              class="baseline-input"
               value="bottom"
             />
             bottom
@@ -86,8 +88,8 @@
           <label>
             <input
               type="radio"
-              name="input-baseline"
-              class="input-baseline"
+              name="baseline-input"
+              class="baseline-input"
               value="hanging"
             />
             hanging
@@ -95,8 +97,8 @@
           <label>
             <input
               type="radio"
-              name="input-baseline"
-              class="input-baseline"
+              name="baseline-input"
+              class="baseline-input"
               value="ideographic"
             />
             ideographic
@@ -104,38 +106,21 @@
           <label>
             <input
               type="radio"
-              name="input-baseline"
-              class="input-baseline"
+              name="baseline-input"
+              class="baseline-input"
               value="middle"
             />
             middle
           </label>
         </div>
+      </div>
+      <div class="canvas">
+        <canvas>Canvas</canvas>
+      </div>
+      <div class="canvas-parameters">
+        <div>DPR</div>
         <div>
-          <p><strong>Position</strong></p>
-          <label>
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value="40"
-              id="input-x"
-              step="1"
-            />
-            x
-          </label>
-          <br />
-          <label>
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value="50"
-              id="input-y"
-              step="1"
-            />
-            y
-          </label>
+          <input type="range" min="1" max="10" value="1" class="dpr-input" />
         </div>
       </div>
     </div>

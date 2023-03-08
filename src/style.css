@@ -1,0 +1,44 @@
+body {
+  margin: 0;
+  font: 16px sans-serif;
+}
+
+.layout {
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  grid: auto / auto 1fr auto;
+  align-items: flex-start;
+}
+
+.text-parameters {
+  grid: auto / auto 1fr;
+  display: grid;
+}
+
+.text-parameters div {
+  padding: 15px 20px;
+}
+
+.text-parameters div:not(:nth-last-child(-n + 2)) {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.canvas {
+  border-left: 1px solid rgba(0, 0, 0, 0.4);
+  border-right: 1px solid rgba(0, 0, 0, 0.4);
+  align-self: stretch;
+}
+
+.canvas-parameters {
+  display: grid;
+  grid: auto / auto;
+}
+
+.canvas-parameters div:nth-child(odd) {
+  padding: 15px 20px 5px;
+}
+
+.canvas-parameters div:nth-child(even) {
+  padding: 5px 20px 15px;
+}
