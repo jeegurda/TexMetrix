@@ -3,7 +3,7 @@ import { Align, Baseline } from './types'
 import * as dom from './dom'
 import './style.css'
 
-const ff = 'sans-serif'
+const ff = 'sans-serif' // TODO: move to input
 
 if (!dom.canvas || !dom.textInput || !dom.fontSizeInput || !dom.dprInput) {
   throw new Error('dom el missing')
@@ -129,9 +129,12 @@ window.addEventListener('resize', () => {
   draw()
 })
 
-dom.textInput.value = text
-dom.dprInput.value = String(dpr)
+const initInputValues = () => {
+  dom.textInput!.value = text
+  dom.dprInput!.value = String(dpr)
+}
 
+initInputValues()
 init()
 draw()
 
