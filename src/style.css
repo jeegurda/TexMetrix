@@ -42,10 +42,14 @@ body {
   grid: auto / auto;
 }
 
-.canvas-parameters div:nth-child(odd) {
+.canvas-parameters div:first-child {
   padding: 15px 20px 5px;
 }
 
-.canvas-parameters div:nth-child(even) {
-  padding: 5px 20px 15px;
+.canvas-parameters div:not(:first-child):not(:last-child) {
+  padding: 5px 20px 5px;
+}
+
+.canvas-parameters div:last-child {
+  padding: 5px 20px 5px;
 }

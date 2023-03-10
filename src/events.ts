@@ -1,40 +1,55 @@
 import { dom } from './dom'
+import { Align, Baseline, Metrix } from './types'
 
-const addEvents = (Metrix: Metrix) => {
-  dom.textInput.addEventListener<'input'>('input', (ev) => {
+const addEvents = (M: Metrix) => {
+  dom.textInput.addEventListener('input', (ev) => {
     const value = (ev.target as HTMLTextAreaElement).value
-    text = value
-    draw()
+
+    M.props.text = value
+    M.draw()
   })
+
   dom.fontSizeInput.addEventListener('input', (ev) => {
     const value = (ev.target as HTMLInputElement).value
-    fs = parseInt(value)
-    draw()
+
+    M.props.fs = parseInt(value)
+    M.draw()
   })
+
   Array.from(dom.alignInputs).forEach((input) => {
     input.addEventListener('change', (ev) => {
       const value = (ev.target as HTMLInputElement).value as Align
-      align = value
-      draw()
+
+      M.props.align = value
+      M.draw()
     })
   })
+
   Array.from(dom.baselineInputs).forEach((input) => {
     input.addEventListener('change', (ev) => {
       const value = (ev.target as HTMLInputElement).value as Baseline
-      baseline = value
-      draw()
+
+      M.props.baseline = value
+      M.draw()
     })
   })
-  dom.dprInput.addEventListener('input', (ev) => {
-    const value = Number((ev.target as HTMLInputElement).value)
-    dpr = value
-    init() // rescaling required
-    draw()
+
+  dom.rrInput.addEventListener('input', (ev) => {
+    const value = (ev.target as HTMLInputElement).value
+
+    dom.rrValue.innerHTML = value
+    M.props.dpr = Number(value)
+    M.init() // rescaling required
+    dom.rrPixelValue.innerHTML = `${M.props.rw}x${M.props.rh}`
+
+    M.draw()
   })
 
   window.addEventListener('resize', () => {
-    init()
-    draw()
+    M.init()
+    dom.rrPixelValue.innerHTML = `${M.props.rw}x${M.props.rh}`
+
+    M.draw()
   })
 }
 

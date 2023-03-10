@@ -1,13 +1,10 @@
 import { checkTMInterface } from './support'
-import { Align, Baseline } from './types'
-import dom from './dom'
+import { Metrix } from './types'
+import { dom } from './dom'
 import './style.css'
+import { addEvents } from './events'
 
 const ff = 'sans-serif' // TODO: move to input
-
-if (!dom.canvas || !dom.textInput || !dom.fontSizeInput || !dom.dprInput) {
-  throw new Error('dom el missing')
-}
 
 const ctx = dom.canvas.getContext('2d')
 
@@ -15,41 +12,46 @@ if (ctx === null) {
   throw new Error('ctx died')
 }
 
-let text = 'jee'
-let fs = 60
-let baseline: Baseline = 'alphabetic'
-let align: Align = 'start'
-let dpr = window.devicePixelRatio
+const M: Metrix = {
+  props: {
+    rw: 0,
+    rh: 0,
 
-let rw = 0
-let rh = 0
-
-const resizeCanvas = () => {
-  rw = ctx.canvas.clientWidth * dpr
-  rh = ctx.canvas.clientHeight * dpr
-
-  ctx.canvas.width = rw
-  ctx.canvas.height = rh
+    text: 'jee',
+    fs: 60,
+    align: 'start',
+    baseline: 'alphabetic',
+    dpr: window.devicePixelRatio,
+  },
+  draw: () => {},
+  init: () => {},
 }
 
 const init = () => {
-  resizeCanvas()
-  ctx.scale(dpr, dpr)
+  M.props.rw = ctx.canvas.clientWidth * M.props.dpr
+  M.props.rh = ctx.canvas.clientHeight * M.props.dpr
+
+  ctx.canvas.width = M.props.rw
+  ctx.canvas.height = M.props.rh
+
+  ctx.scale(M.props.dpr, M.props.dpr)
 }
 
 const draw = () => {
-  let refX = 100
-  let refY = 100
+  const refX = 100
+  const refY = 100
 
-  ctx.textAlign = align
-  ctx.textBaseline = baseline
+  const { rw, rh } = M.props
+
+  ctx.textAlign = M.props.align
+  ctx.textBaseline = M.props.baseline
 
   ctx.clearRect(0, 0, rw, rh)
-  ctx.font = `${fs}px ${ff}`
+  ctx.font = `${M.props.fs}px ${ff}`
 
-  const metrics = ctx.measureText(text)
+  const metrics = ctx.measureText(M.props.text)
 
-  ctx.fillText(text, refX, refY)
+  ctx.fillText(M.props.text, refX, refY)
 
   const blAlignPath = new Path2D()
 
@@ -93,29 +95,22 @@ const draw = () => {
   ctx.stroke(fPath)
 }
 
-class Metrix {
-  props = {
-    text: '',
-    fs: '',
-    align: '',
-    baseline: '',
-    dpr: '',
-  }
-  actions = {
-    draw,
-    init,
-  }
-}
-
-addEvents(Metrix)
+M.draw = draw
+M.init = init
 
 const initInputValues = () => {
-  dom.textInput!.value = text
-  dom.dprInput!.value = String(dpr)
+  dom.textInput.value = M.props.text
+  dom.rrInput.value = String(M.props.dpr)
+
+  dom.rrValue.innerHTML = String(M.props.dpr)
+  dom.dprValue.innerHTML = String(window.devicePixelRatio)
+  dom.rrPixelValue.innerHTML = `${M.props.rw}x${M.props.rh}`
 }
 
-initInputValues()
+addEvents(M)
+
 init()
 draw()
+initInputValues()
 
 checkTMInterface()

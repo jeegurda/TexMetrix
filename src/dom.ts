@@ -7,9 +7,12 @@ const baselineInputs =
 
 const canvas = document.querySelector<HTMLCanvasElement>('.canvas canvas')
 
-const dprInput = document.querySelector<HTMLInputElement>('.dpr-input')
+const rrValue = document.querySelector<HTMLSpanElement>('.rr-value')
+const dprValue = document.querySelector<HTMLSpanElement>('.dpr-value')
+const rrInput = document.querySelector<HTMLInputElement>('.rr-input')
+const rrPixelValue = document.querySelector<HTMLSpanElement>('.rr-pixel-value')
 
-const dom = {
+const nullableDom = {
   textInput,
   fontSizeInput,
   alignInputs,
@@ -17,15 +20,22 @@ const dom = {
 
   canvas,
 
-  dprInput,
+  rrValue,
+  dprValue,
+  rrInput,
+  rrPixelValue,
 } as const
 
-Object.entries(dom).forEach(([key, el]) => {
+Object.entries(nullableDom).forEach(([key, el]) => {
   if (el === null) {
     throw new Error(`dom el missing (${key})`)
   }
 })
 
-const existingDom = dom as NonNullable<typeof dom>
+type ExistingDom = {
+  [K in keyof typeof nullableDom]: NonNullable<typeof nullableDom[K]>
+}
 
-export { existingDom as dom }
+const dom = nullableDom as ExistingDom
+
+export { dom }

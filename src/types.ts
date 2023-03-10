@@ -10,14 +10,15 @@ export type Baseline =
 
 export type Metrix = {
   props: {
+    rw: number
+    rh: number
+
     text: string
-    fs: string
-    align: string
-    baseline: string
-    dpr: string
+    fs: number
+    align: Align
+    baseline: Baseline
+    dpr: number
   }
-  actions: {
-    draw: () => void
-    init: () => void
-  }
+  draw: () => void
+  init: () => void
 }
