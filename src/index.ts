@@ -1,6 +1,6 @@
 import { checkTMInterface } from './support'
 import { Align, Baseline } from './types'
-import * as dom from './dom'
+import dom from './dom'
 import './style.css'
 
 const ff = 'sans-serif' // TODO: move to input
@@ -93,41 +93,21 @@ const draw = () => {
   ctx.stroke(fPath)
 }
 
-dom.textInput.addEventListener<'input'>('input', (ev) => {
-  const value = (ev.target as HTMLTextAreaElement).value
-  text = value
-  draw()
-})
-dom.fontSizeInput.addEventListener('input', (ev) => {
-  const value = (ev.target as HTMLInputElement).value
-  fs = parseInt(value)
-  draw()
-})
-Array.from(dom.alignInputs).forEach((input) => {
-  input.addEventListener('change', (ev) => {
-    const value = (ev.target as HTMLInputElement).value as Align
-    align = value
-    draw()
-  })
-})
-Array.from(dom.baselineInputs).forEach((input) => {
-  input.addEventListener('change', (ev) => {
-    const value = (ev.target as HTMLInputElement).value as Baseline
-    baseline = value
-    draw()
-  })
-})
-dom.dprInput.addEventListener('input', (ev) => {
-  const value = Number((ev.target as HTMLInputElement).value)
-  dpr = value
-  init() // rescaling required
-  draw()
-})
+class Metrix {
+  props = {
+    text: '',
+    fs: '',
+    align: '',
+    baseline: '',
+    dpr: '',
+  }
+  actions = {
+    draw,
+    init,
+  }
+}
 
-window.addEventListener('resize', () => {
-  init()
-  draw()
-})
+addEvents(Metrix)
 
 const initInputValues = () => {
   dom.textInput!.value = text
