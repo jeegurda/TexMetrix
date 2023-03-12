@@ -17,31 +17,33 @@ const M: Metrix = {
     rw: 0,
     rh: 0,
 
+    drawX: 100,
+    drawY: 100,
+
+    scaleMp: 0.7,
+
     text: 'jee',
     fs: 60,
     align: 'start',
     baseline: 'alphabetic',
-    dpr: window.devicePixelRatio,
+    rr: window.devicePixelRatio,
   },
   draw: () => {},
   init: () => {},
 }
 
 const init = () => {
-  M.props.rw = ctx.canvas.clientWidth * M.props.dpr
-  M.props.rh = ctx.canvas.clientHeight * M.props.dpr
+  M.props.rw = ctx.canvas.clientWidth / M.props.scaleMp
+  M.props.rh = ctx.canvas.clientHeight / M.props.scaleMp
 
-  ctx.canvas.width = M.props.rw
-  ctx.canvas.height = M.props.rh
+  ctx.canvas.width = M.props.rw * M.props.rr
+  ctx.canvas.height = M.props.rh * M.props.rr
 
-  ctx.scale(M.props.dpr, M.props.dpr)
+  ctx.scale(M.props.rr * M.props.scaleMp, M.props.rr * M.props.scaleMp)
 }
 
 const draw = () => {
-  const refX = 100
-  const refY = 100
-
-  const { rw, rh } = M.props
+  const { rw, rh, drawX: dx, drawY: dy } = M.props
 
   ctx.textAlign = M.props.align
   ctx.textBaseline = M.props.baseline
@@ -51,17 +53,17 @@ const draw = () => {
 
   const metrics = ctx.measureText(M.props.text)
 
-  ctx.fillText(M.props.text, refX, refY)
+  ctx.fillText(M.props.text, dx, dy)
 
   const blAlignPath = new Path2D()
 
   // baseline
-  blAlignPath.moveTo(0, refY)
-  blAlignPath.lineTo(rw, refY)
+  blAlignPath.moveTo(0, dy)
+  blAlignPath.lineTo(rw, dy)
 
   // align
-  blAlignPath.moveTo(refX, 0)
-  blAlignPath.lineTo(refX, rh)
+  blAlignPath.moveTo(dx, 0)
+  blAlignPath.lineTo(dx, rh)
 
   ctx.strokeStyle = 'rgb(200,0,200)'
   ctx.stroke(blAlignPath)
@@ -69,16 +71,16 @@ const draw = () => {
   const bbPath = new Path2D()
 
   // h bb
-  bbPath.moveTo(0, refY - metrics.actualBoundingBoxAscent)
-  bbPath.lineTo(rw, refY - metrics.actualBoundingBoxAscent)
-  bbPath.moveTo(0, refY + metrics.actualBoundingBoxDescent)
-  bbPath.lineTo(rw, refY + metrics.actualBoundingBoxDescent)
+  bbPath.moveTo(0, dy - metrics.actualBoundingBoxAscent)
+  bbPath.lineTo(rw, dy - metrics.actualBoundingBoxAscent)
+  bbPath.moveTo(0, dy + metrics.actualBoundingBoxDescent)
+  bbPath.lineTo(rw, dy + metrics.actualBoundingBoxDescent)
 
   // v bb
-  bbPath.moveTo(refX - metrics.actualBoundingBoxLeft, 0) // this can return negative for left-aligned text
-  bbPath.lineTo(refX - metrics.actualBoundingBoxLeft, rh)
-  bbPath.moveTo(refX + metrics.actualBoundingBoxRight, 0)
-  bbPath.lineTo(refX + metrics.actualBoundingBoxRight, rh)
+  bbPath.moveTo(dx - metrics.actualBoundingBoxLeft, 0) // this can return negative for left-aligned text
+  bbPath.lineTo(dx - metrics.actualBoundingBoxLeft, rh)
+  bbPath.moveTo(dx + metrics.actualBoundingBoxRight, 0)
+  bbPath.lineTo(dx + metrics.actualBoundingBoxRight, rh)
 
   ctx.strokeStyle = 'rgb(0,0,0)'
   ctx.stroke(bbPath)
@@ -86,10 +88,10 @@ const draw = () => {
   const fPath = new Path2D()
 
   // font bb
-  fPath.moveTo(0, refY - metrics.fontBoundingBoxAscent)
-  fPath.lineTo(rw, refY - metrics.fontBoundingBoxAscent)
-  fPath.moveTo(0, refY + metrics.fontBoundingBoxDescent)
-  fPath.lineTo(rw, refY + metrics.fontBoundingBoxDescent)
+  fPath.moveTo(0, dy - metrics.fontBoundingBoxAscent)
+  fPath.lineTo(rw, dy - metrics.fontBoundingBoxAscent)
+  fPath.moveTo(0, dy + metrics.fontBoundingBoxDescent)
+  fPath.lineTo(rw, dy + metrics.fontBoundingBoxDescent)
 
   ctx.strokeStyle = 'rgb(240,0,0)'
   ctx.stroke(fPath)
@@ -100,11 +102,18 @@ M.init = init
 
 const initInputValues = () => {
   dom.textInput.value = M.props.text
-  dom.rrInput.value = String(M.props.dpr)
+  dom.rrInput.value = String(M.props.rr)
 
-  dom.rrValue.innerHTML = String(M.props.dpr)
+  dom.rrValue.innerHTML = String(M.props.rr)
   dom.dprValue.innerHTML = String(window.devicePixelRatio)
-  dom.rrPixelValue.innerHTML = `${M.props.rw}x${M.props.rh}`
+  dom.canvasSizeValue.innerHTML = `${M.props.rw.toFixed(
+    1,
+  )}x${M.props.rh.toFixed(1)}`
+  dom.renderPixelValue.innerHTML = `${(M.props.rw * M.props.rr).toFixed(1)}x${(
+    M.props.rh * M.props.rr
+  ).toFixed(1)}`
+
+  dom.zoomValue.innerHTML = String(M.props.scaleMp)
 }
 
 addEvents(M)

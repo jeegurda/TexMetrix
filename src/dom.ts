@@ -10,7 +10,15 @@ const canvas = document.querySelector<HTMLCanvasElement>('.canvas canvas')
 const rrValue = document.querySelector<HTMLSpanElement>('.rr-value')
 const dprValue = document.querySelector<HTMLSpanElement>('.dpr-value')
 const rrInput = document.querySelector<HTMLInputElement>('.rr-input')
-const rrPixelValue = document.querySelector<HTMLSpanElement>('.rr-pixel-value')
+const canvasSizeValue =
+  document.querySelector<HTMLSpanElement>('.canvas-size-value')
+const renderPixelValue = document.querySelector<HTMLSpanElement>(
+  '.render-pixel-value',
+)
+
+const canvasUi = document.querySelector<HTMLDivElement>('.canvas-ui')
+
+const zoomValue = document.querySelector<HTMLSpanElement>('.zoom-value')
 
 const nullableDom = {
   textInput,
@@ -23,7 +31,12 @@ const nullableDom = {
   rrValue,
   dprValue,
   rrInput,
-  rrPixelValue,
+  canvasSizeValue,
+  renderPixelValue,
+
+  zoomValue,
+
+  canvasUi,
 } as const
 
 Object.entries(nullableDom).forEach(([key, el]) => {

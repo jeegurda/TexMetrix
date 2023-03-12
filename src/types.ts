@@ -13,11 +13,16 @@ export type Metrix = {
     rw: number
     rh: number
 
+    drawX: number
+    drawY: number
+
+    scaleMp: number
+
     text: string
     fs: number
     align: Align
     baseline: Baseline
-    dpr: number
+    rr: number
   }
   draw: () => void
   init: () => void
