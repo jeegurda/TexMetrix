@@ -23,7 +23,16 @@ export type Metrix = {
     align: Align
     baseline: Baseline
     rr: number
+
+    rest?: any // TEMP: remove
   }
   draw: () => void
   init: () => void
+}
+
+declare global {
+  // TEMP: remove
+  interface Window {
+    M: Metrix
+  }
 }

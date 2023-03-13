@@ -61,9 +61,6 @@ const addEvents = (M: Metrix) => {
     ev.preventDefault()
   })
 
-  let dx = 0
-  let dy = 0
-
   let scaleLin = 0
 
   dom.canvasUi.addEventListener('wheel', (ev) => {
@@ -71,16 +68,32 @@ const addEvents = (M: Metrix) => {
     if (ev.ctrlKey) {
       scaleLin += -ev.deltaY / 100
 
-      M.props.scaleMp = Math.pow(1.4, scaleLin)
+      let scaleD = M.props.scaleMp
+
+      const scaleExp = Math.pow(1.4, scaleLin)
+
+      M.props.scaleMp = scaleExp
+
       dom.zoomValue.innerHTML = M.props.scaleMp.toFixed(2)
 
-      M.init()
-    } else {
-      dx += ev.deltaX
-      dy += ev.deltaY
+      scaleD -= M.props.scaleMp
 
-      M.props.drawX -= ev.deltaX
-      M.props.drawY -= ev.deltaY
+      const xBefore = M.props.rw * (ev.offsetX / M.props.rest.cw)
+      const yBefore = M.props.rh * (ev.offsetY / M.props.rest.ch)
+
+      M.init()
+
+      const xAfter = M.props.rw * (ev.offsetX / M.props.rest.cw)
+      const yAfter = M.props.rh * (ev.offsetY / M.props.rest.ch)
+
+      M.props.drawX += xAfter - xBefore
+      M.props.drawY += yAfter - yBefore
+    } else {
+      const dx = ev.deltaX / M.props.scaleMp
+      const dy = ev.deltaY / M.props.scaleMp
+
+      M.props.drawX -= dx
+      M.props.drawY -= dy
     }
     M.draw()
   })
@@ -96,8 +109,8 @@ const addEvents = (M: Metrix) => {
 
     const handleMove = (ev: MouseEvent) => {
       ev.preventDefault()
-      M.props.drawX = origDrawX + ev.clientX - downX
-      M.props.drawY = origDrawY + ev.clientY - downY
+      M.props.drawX = origDrawX + (ev.clientX - downX) / M.props.scaleMp
+      M.props.drawY = origDrawY + (ev.clientY - downY) / M.props.scaleMp
       M.draw()
     }
 

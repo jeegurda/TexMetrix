@@ -20,26 +20,34 @@ const M: Metrix = {
     drawX: 100,
     drawY: 100,
 
-    scaleMp: 0.7,
+    scaleMp: 1,
 
     text: 'jee',
     fs: 60,
     align: 'start',
     baseline: 'alphabetic',
     rr: window.devicePixelRatio,
+
+    rest: {},
   },
   draw: () => {},
   init: () => {},
 }
 
 const init = () => {
-  M.props.rw = ctx.canvas.clientWidth / M.props.scaleMp
-  M.props.rh = ctx.canvas.clientHeight / M.props.scaleMp
+  const cw = ctx.canvas.clientWidth
+  const ch = ctx.canvas.clientHeight
 
-  ctx.canvas.width = M.props.rw * M.props.rr
-  ctx.canvas.height = M.props.rh * M.props.rr
+  M.props.rw = cw / M.props.scaleMp
+  M.props.rh = ch / M.props.scaleMp
+
+  ctx.canvas.width = cw * M.props.rr
+  ctx.canvas.height = ch * M.props.rr
 
   ctx.scale(M.props.rr * M.props.scaleMp, M.props.rr * M.props.scaleMp)
+
+  M.props.rest.cw = cw
+  M.props.rest.ch = ch
 }
 
 const draw = () => {
@@ -123,3 +131,5 @@ draw()
 initInputValues()
 
 checkTMInterface()
+
+window.M = M
