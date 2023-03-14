@@ -1,5 +1,5 @@
 import { checkTMInterface } from './support'
-import { Metrix } from './types'
+import { Align, Metrix } from './types'
 import { dom } from './dom'
 import './style.css'
 import { addEvents } from './events'
@@ -24,7 +24,7 @@ const M: Metrix = {
 
     text: 'jee',
     fs: 60,
-    align: 'start',
+    align: Align.START,
     baseline: 'alphabetic',
     rr: window.devicePixelRatio,
 

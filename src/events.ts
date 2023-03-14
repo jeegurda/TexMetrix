@@ -17,22 +17,31 @@ const addEvents = (M: Metrix) => {
     M.draw()
   })
 
-  Array.from(dom.alignInputs).forEach((input) => {
-    input.addEventListener('change', (ev) => {
-      const value = (ev.target as HTMLInputElement).value as Align
+  // Validate value with a type guard
+  const validateValue = <Type>(value: unknown): value is Type => {
+    if ((value as string) in Align) {
+      return true
+    } else {
+      return false
+    }
+  }
 
+  dom.alignInput.addEventListener('change', (ev) => {
+    const value = dom.alignInput.value
+
+    if (validateValue<Align>(value)) {
       M.props.align = value
       M.draw()
-    })
+    } else {
+      console.log('value %o not in enum %o', value, Align)
+    }
   })
 
-  Array.from(dom.baselineInputs).forEach((input) => {
-    input.addEventListener('change', (ev) => {
-      const value = (ev.target as HTMLInputElement).value as Baseline
+  dom.baselineInput.addEventListener('change', (ev) => {
+    const value = (ev.target as HTMLInputElement).value as Baseline
 
-      M.props.baseline = value
-      M.draw()
-    })
+    M.props.baseline = value
+    M.draw()
   })
 
   dom.rrInput.addEventListener('input', (ev) => {

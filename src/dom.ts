@@ -1,9 +1,9 @@
 const textInput = document.querySelector<HTMLTextAreaElement>('.text-input')
 const fontSizeInput =
   document.querySelector<HTMLInputElement>('.font-size-input')
-const alignInputs = document.querySelectorAll<HTMLInputElement>('.align-input')
-const baselineInputs =
-  document.querySelectorAll<HTMLInputElement>('.baseline-input')
+const alignInput = document.querySelector<HTMLSelectElement>('.align-input')
+const baselineInput =
+  document.querySelector<HTMLSelectElement>('.baseline-input')
 
 const canvas = document.querySelector<HTMLCanvasElement>('.canvas canvas')
 
@@ -23,8 +23,8 @@ const zoomValue = document.querySelector<HTMLSpanElement>('.zoom-value')
 const nullableDom = {
   textInput,
   fontSizeInput,
-  alignInputs,
-  baselineInputs,
+  alignInput,
+  baselineInput,
 
   canvas,
 

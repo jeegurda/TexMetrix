@@ -1,4 +1,8 @@
-export type Align = 'start' | 'right' | 'end'
+export enum Align {
+  START = 'start',
+  RIGHT = 'right',
+  END = 'end',
+}
 
 export type Baseline =
   | 'alphabetic'
