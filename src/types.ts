@@ -1,16 +1,17 @@
 export enum Align {
   START = 'start',
-  RIGHT = 'right',
+  CENTER = 'center',
   END = 'end',
 }
 
-export type Baseline =
-  | 'alphabetic'
-  | 'bottom'
-  | 'hanging'
-  | 'ideographic'
-  | 'middle'
-  | 'top'
+export enum Baseline {
+  ALPHABETIC = 'alphabetic',
+  BOTTOM = 'bottom',
+  HANGING = 'hanging',
+  IDEOGRAPHIC = 'ideographic',
+  MIDDLE = 'middle',
+  TOP = 'top',
+}
 
 export type Metrix = {
   props: {

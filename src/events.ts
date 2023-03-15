@@ -1,51 +1,33 @@
 import { dom } from './dom'
 import { Align, Baseline, Metrix } from './types'
-import { debounce } from './utils'
+import { validateSelectValue } from './utils'
 
 const addEvents = (M: Metrix) => {
   dom.textInput.addEventListener('input', (ev) => {
-    const value = (ev.target as HTMLTextAreaElement).value
-
-    M.props.text = value
+    M.props.text = dom.textInput.value
     M.draw()
   })
 
   dom.fontSizeInput.addEventListener('input', (ev) => {
-    const value = (ev.target as HTMLInputElement).value
-
-    M.props.fs = parseInt(value)
+    M.props.fs = parseInt(dom.fontSizeInput.value)
     M.draw()
   })
 
-  // Validate value with a type guard
-  const validateValue = <Type>(value: unknown): value is Type => {
-    if ((value as string) in Align) {
-      return true
-    } else {
-      return false
-    }
-  }
-
   dom.alignInput.addEventListener('change', (ev) => {
-    const value = dom.alignInput.value
-
-    if (validateValue<Align>(value)) {
-      M.props.align = value
-      M.draw()
-    } else {
-      console.log('value %o not in enum %o', value, Align)
-    }
+    M.props.align = validateSelectValue<Align>(dom.alignInput.value, Align)
+    M.draw()
   })
 
   dom.baselineInput.addEventListener('change', (ev) => {
-    const value = (ev.target as HTMLInputElement).value as Baseline
-
-    M.props.baseline = value
+    M.props.baseline = validateSelectValue<Baseline>(
+      dom.baselineInput.value,
+      Baseline,
+    )
     M.draw()
   })
 
   dom.rrInput.addEventListener('input', (ev) => {
-    const value = (ev.target as HTMLInputElement).value
+    const value = dom.rrInput.value
 
     dom.rrValue.innerHTML = value
     M.props.rr = Number(value)

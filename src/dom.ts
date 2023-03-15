@@ -1,3 +1,5 @@
+import { te } from './utils'
+
 const textInput = document.querySelector<HTMLTextAreaElement>('.text-input')
 const fontSizeInput =
   document.querySelector<HTMLInputElement>('.font-size-input')
@@ -40,9 +42,7 @@ const nullableDom = {
 } as const
 
 Object.entries(nullableDom).forEach(([key, el]) => {
-  if (el === null) {
-    throw new Error(`dom el missing (${key})`)
-  }
+  el ?? te(`dom el missing (${key})`)
 })
 
 type ExistingDom = {

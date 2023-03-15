@@ -1,16 +1,13 @@
 import { checkTMInterface } from './support'
-import { Align, Metrix } from './types'
+import { Align, Baseline, Metrix } from './types'
 import { dom } from './dom'
 import './style.css'
 import { addEvents } from './events'
+import { te } from './utils'
 
 const ff = 'sans-serif' // TODO: move to input
 
-const ctx = dom.canvas.getContext('2d')
-
-if (ctx === null) {
-  throw new Error('ctx died')
-}
+const ctx = dom.canvas.getContext('2d') ?? te('ctx died')
 
 const M: Metrix = {
   props: {
@@ -25,7 +22,7 @@ const M: Metrix = {
     text: 'jee',
     fs: 60,
     align: Align.START,
-    baseline: 'alphabetic',
+    baseline: Baseline.ALPHABETIC,
     rr: window.devicePixelRatio,
 
     rest: {},
@@ -50,7 +47,14 @@ const init = () => {
   M.props.rest.ch = ch
 }
 
+let af: number | null = null
+
 const draw = () => {
+  typeof af === 'number' && cancelAnimationFrame(af)
+  af = requestAnimationFrame(drawSync)
+}
+
+const drawSync = () => {
   const { rw, rh, drawX: dx, drawY: dy } = M.props
 
   ctx.textAlign = M.props.align
