@@ -16,11 +16,11 @@ body {
   display: grid;
 }
 
-.text-parameters div {
+.text-parameters > div {
   padding: 15px 20px;
 }
 
-.text-parameters div:not(:nth-last-child(-n + 2)) {
+.text-parameters > div:not(:nth-last-child(-n + 2)) {
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
@@ -56,14 +56,14 @@ body {
   grid: auto / auto;
 }
 
-.canvas-parameters div:first-child {
+.canvas-parameters > div:first-child {
   padding: 15px 20px 5px;
 }
 
-.canvas-parameters div:not(:first-child):not(:last-child) {
+.canvas-parameters > div:not(:first-child):not(:last-child) {
   padding: 5px 20px 5px;
 }
 
-.canvas-parameters div:last-child {
+.canvas-parameters > div:last-child {
   padding: 5px 20px 5px;
 }
