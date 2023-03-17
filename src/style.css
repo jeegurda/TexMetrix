@@ -12,16 +12,31 @@ body {
 }
 
 .text-parameters {
-  grid: auto / auto 1fr;
+  grid: auto / auto;
   display: grid;
 }
 
-.text-parameters > div {
-  padding: 15px 20px;
+.text-parameters > div:first-child {
+  padding: 15px 20px 5px;
 }
 
-.text-parameters > div:not(:nth-last-child(-n + 2)) {
+.text-parameters > div:not(:first-child):not(:last-child) {
+  padding: 5px 20px 5px;
+}
+
+.text-parameters > div:last-child {
+  padding: 5px 20px 5px;
+}
+
+.text-parameters > div:nth-child(even) {
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.text-input {
+  resize: vertical;
+  min-height: 60px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .canvas {

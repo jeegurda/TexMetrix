@@ -13,18 +13,28 @@
         <div>
           <textarea class="text-input" autofocus rows="3"></textarea>
         </div>
-        <div>Font-size</div>
+        <div>Font-size:</div>
         <div>
           <input
             type="range"
             min="6"
             max="200"
-            value="60"
+            value="0"
             class="font-size-input"
             step="1"
           />
         </div>
-        <div>Align</div>
+        <div>Line-height:</div>
+        <div>
+          <input
+            type="number"
+            min="0"
+            max="200"
+            value="0"
+            class="line-height-input"
+          />
+        </div>
+        <div>Align:</div>
         <div>
           <select class="align-input">
             <option value="start">start</option>
@@ -32,7 +42,7 @@
             <option value="end">end</option>
           </select>
         </div>
-        <div>Baseline</div>
+        <div>Baseline:</div>
         <div>
           <select class="baseline-input">
             <option value="top">top</option>
@@ -60,7 +70,7 @@
         <div>Render res: <span class="render-pixel-value">0</span></div>
         <div>Zoom: <span class="zoom-value">0</span></div>
         <div>
-          <div>Baseline/align</div>
+          <div>Baseline/align:</div>
           <div>
             <input type="color" class="bl-align-color-input" />
             <input

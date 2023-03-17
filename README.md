@@ -19,5 +19,4 @@ $ npm run serve  # runs at http://localhost:3000
 
 ### todo:
 
-- newlines
 - get font list in webkit browsers

@@ -30,10 +30,11 @@ export type Metrix = {
 
     text: string
     fs: number
+    lh: number
     align: Align
     baseline: Baseline
     rr: number
-    lines: {
+    style: {
       actualBb: LineStyle
       fontBb: LineStyle
       blAlign: LineStyle

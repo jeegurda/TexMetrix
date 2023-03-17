@@ -6,6 +6,8 @@ import { addEvents } from './events'
 import { te } from './utils'
 
 const ff = 'serif' // TODO: move to input
+const mlOffset = 30
+const mtOffset = 10
 
 const ctx = dom.canvas.getContext('2d') ?? te('ctx died')
 
@@ -21,10 +23,11 @@ const M: Metrix = {
 
     text: 'my honest reaction 😅👌🏽',
     fs: 60,
+    lh: 80,
     align: Align.START,
     baseline: Baseline.ALPHABETIC,
     rr: window.devicePixelRatio,
-    lines: {
+    style: {
       blAlign: { color: '#c800c8', width: 0.5 },
       fontBb: { color: '#f00000', width: 0.5 },
       actualBb: { color: '#000000', width: 0.5 },
@@ -60,97 +63,138 @@ const draw = () => {
 }
 
 const drawSync = () => {
-  const { rw, rh, drawX: dx, drawY: dy } = M.props
+  const { rw, rh, lh } = M.props
 
-  ctx.textAlign = M.props.align
-  ctx.textBaseline = M.props.baseline
+  const drawText = (line: string, dx: number, dy: number) => {
+    ctx.textAlign = M.props.align
+    ctx.textBaseline = M.props.baseline
+    ctx.font = `${M.props.fs}px ${ff}`
+    ctx.fillText(line, dx, dy)
+  }
+
+  const drawBlAlign = (idx: number, dx: number, dy: number) => {
+    const blAlignPath = new Path2D()
+    blAlignPath.moveTo(0, dy)
+    blAlignPath.lineTo(rw, dy)
+
+    // draw idx-independent lines once
+    if (idx === 0) {
+      blAlignPath.moveTo(dx, 0)
+      blAlignPath.lineTo(dx, rh)
+    }
+
+    ctx.strokeStyle = M.props.style.blAlign.color
+    ctx.lineWidth = M.props.style.blAlign.width
+    ctx.stroke(blAlignPath)
+  }
+
+  const drawFontBb = (
+    idx: number,
+    mets: TextMetrics,
+    dx: number,
+    dy: number,
+  ) => {
+    const fPath = new Path2D()
+    fPath.moveTo(0, dy - mets.fontBoundingBoxAscent)
+    fPath.lineTo(rw, dy - mets.fontBoundingBoxAscent)
+    fPath.moveTo(0, dy + mets.fontBoundingBoxDescent)
+    fPath.lineTo(rw, dy + mets.fontBoundingBoxDescent)
+
+    ctx.strokeStyle = M.props.style.fontBb.color
+    ctx.lineWidth = M.props.style.fontBb.width
+    ctx.stroke(fPath)
+  }
+
+  const drawActualBb = (
+    idx: number,
+    mets: TextMetrics,
+    dx: number,
+    dy: number,
+  ) => {
+    // h
+    const aPath = new Path2D()
+    aPath.moveTo(0, dy - mets.actualBoundingBoxAscent)
+    aPath.lineTo(rw, dy - mets.actualBoundingBoxAscent)
+    aPath.moveTo(0, dy + mets.actualBoundingBoxDescent)
+    aPath.lineTo(rw, dy + mets.actualBoundingBoxDescent)
+
+    // v
+    // draw idx-independent Y lines once
+    if (idx === 0) {
+      aPath.moveTo(dx - mets.actualBoundingBoxLeft, 0) // this can return negative for left-aligned text
+      aPath.lineTo(dx - mets.actualBoundingBoxLeft, rh)
+    }
+    aPath.moveTo(dx + mets.actualBoundingBoxRight, 0)
+    aPath.lineTo(dx + mets.actualBoundingBoxRight, rh)
+
+    ctx.strokeStyle = M.props.style.actualBb.color
+    ctx.lineWidth = M.props.style.actualBb.width
+    ctx.stroke(aPath)
+  }
+
+  let lastMLYTop = 0
+
+  const drawMl = (idx: number, mets: TextMetrics, dx: number, dy: number) => {
+    const yBase = idx === 0 ? dy - mets.actualBoundingBoxAscent : lastMLYTop
+
+    // measuring line
+    const m = new Path2D()
+    const horMLY = yBase - mlOffset / M.props.scaleMp
+    const verMLx = dx + mets.actualBoundingBoxRight + mlOffset / M.props.scaleMp
+
+    m.moveTo(dx - mets.actualBoundingBoxLeft, horMLY)
+    m.lineTo(dx + mets.actualBoundingBoxRight, horMLY)
+    m.moveTo(verMLx, dy - mets.actualBoundingBoxAscent)
+    m.lineTo(verMLx, dy + mets.actualBoundingBoxDescent)
+
+    ctx.globalAlpha = 0.5
+    ctx.strokeStyle = M.props.style.actualBb.color
+    ctx.lineWidth = M.props.style.actualBb.width
+    ctx.stroke(m)
+    ctx.globalAlpha = 1
+
+    // measuring line text
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'bottom'
+    ctx.font = `${M.props.fs / 2}px sans-serif`
+
+    const w = mets.actualBoundingBoxLeft + mets.actualBoundingBoxRight
+    const horX = dx - mets.actualBoundingBoxLeft + w / 2
+    const horY = horMLY - mtOffset / M.props.scaleMp
+    ctx.fillText(`${w.toFixed(1)}px`, horX, horY)
+
+    const h = mets.actualBoundingBoxAscent + mets.actualBoundingBoxDescent
+    const verX = verMLx + mtOffset / M.props.scaleMp
+    const verY = dy - mets.actualBoundingBoxAscent + h / 2
+    ctx.translate(verX, verY)
+    ctx.rotate(90 / (180 / Math.PI))
+    ctx.fillText(`${h.toFixed(1)}px`, 0, 0)
+    ctx.rotate(-90 / (180 / Math.PI))
+    ctx.translate(-verX, -verY)
+
+    // top point of text above hor line
+    lastMLYTop = horY - M.props.fs / 2
+  }
 
   ctx.clearRect(0, 0, rw, rh)
-  ctx.font = `${M.props.fs}px ${ff}`
 
-  const metrics = ctx.measureText(M.props.text)
+  const lines = M.props.text.split('\n')
 
-  ctx.fillText(M.props.text, dx, dy)
+  lines.forEach((line, idx) => {
+    const dx = M.props.drawX
+    const dy = M.props.drawY + lh * idx
 
-  ctx.globalAlpha = 0.5
+    drawText(line, dx, dy)
 
-  // baseline
-  const blAlignPath = new Path2D()
-  blAlignPath.moveTo(0, dy)
-  blAlignPath.lineTo(rw, dy)
+    ctx.globalAlpha = 0.5
+    const mets = ctx.measureText(line)
+    drawBlAlign(idx, dx, dy)
+    drawFontBb(idx, mets, dx, dy)
+    drawActualBb(idx, mets, dx, dy)
+    ctx.globalAlpha = 1
 
-  // align
-  blAlignPath.moveTo(dx, 0)
-  blAlignPath.lineTo(dx, rh)
-
-  ctx.strokeStyle = M.props.lines.blAlign.color
-  ctx.lineWidth = M.props.lines.blAlign.width
-  ctx.stroke(blAlignPath)
-
-  // font bb
-  const fPath = new Path2D()
-  fPath.moveTo(0, dy - metrics.fontBoundingBoxAscent)
-  fPath.lineTo(rw, dy - metrics.fontBoundingBoxAscent)
-  fPath.moveTo(0, dy + metrics.fontBoundingBoxDescent)
-  fPath.lineTo(rw, dy + metrics.fontBoundingBoxDescent)
-
-  ctx.strokeStyle = M.props.lines.fontBb.color
-  ctx.lineWidth = M.props.lines.fontBb.width
-  ctx.stroke(fPath)
-
-  // h actual bb
-  const bbPath = new Path2D()
-  bbPath.moveTo(0, dy - metrics.actualBoundingBoxAscent)
-  bbPath.lineTo(rw, dy - metrics.actualBoundingBoxAscent)
-  bbPath.moveTo(0, dy + metrics.actualBoundingBoxDescent)
-  bbPath.lineTo(rw, dy + metrics.actualBoundingBoxDescent)
-
-  // v actual bb
-  bbPath.moveTo(dx - metrics.actualBoundingBoxLeft, 0) // this can return negative for left-aligned text
-  bbPath.lineTo(dx - metrics.actualBoundingBoxLeft, rh)
-  bbPath.moveTo(dx + metrics.actualBoundingBoxRight, 0)
-  bbPath.lineTo(dx + metrics.actualBoundingBoxRight, rh)
-
-  ctx.strokeStyle = M.props.lines.actualBb.color
-  ctx.lineWidth = M.props.lines.actualBb.width
-  ctx.stroke(bbPath)
-
-  ctx.globalAlpha = 1
-
-  // measuring lines
-  const m = new Path2D()
-  const horMLY =
-    dy - metrics.actualBoundingBoxAscent - (30 / M.props.scaleMp) * 2
-  const verMLx =
-    dx + metrics.actualBoundingBoxRight + (30 / M.props.scaleMp) * 2
-
-  m.moveTo(dx - metrics.actualBoundingBoxLeft, horMLY)
-  m.lineTo(dx + metrics.actualBoundingBoxRight, horMLY)
-  m.moveTo(verMLx, dy - metrics.actualBoundingBoxAscent)
-  m.lineTo(verMLx, dy + metrics.actualBoundingBoxDescent)
-
-  ctx.strokeStyle = M.props.lines.actualBb.color
-  ctx.lineWidth = M.props.lines.actualBb.width
-  ctx.stroke(m)
-
-  ctx.textAlign = 'center'
-  ctx.textBaseline = 'bottom'
-
-  ctx.font = `${M.props.fs / 2}px sans-serif`
-
-  const w = metrics.actualBoundingBoxLeft + metrics.actualBoundingBoxRight
-  const horX = dx - metrics.actualBoundingBoxLeft + w / 2
-  const horY = horMLY - (10 / M.props.scaleMp) * 2
-  ctx.fillText(`${w.toFixed(1)}px`, horX, horY)
-
-  const h = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent
-  const verX = verMLx + (10 / M.props.scaleMp) * 2
-  const verY = dy - metrics.actualBoundingBoxAscent + h / 2
-  ctx.translate(verX, verY)
-  ctx.rotate(90 / (180 / Math.PI))
-  ctx.fillText(`${h.toFixed(1)}px`, 0, 0)
-  ctx.rotate(-90 / (180 / Math.PI))
-  ctx.translate(-verX, -verY)
+    drawMl(idx, mets, dx, dy)
+  })
 }
 
 M.draw = draw
@@ -158,8 +202,12 @@ M.init = init
 
 const initInputValues = () => {
   dom.textInput.value = M.props.text
-  dom.rrInput.value = String(M.props.rr)
+  dom.fontSizeInput.value = String(M.props.fs)
+  dom.lhInput.value = String(M.props.lh)
+  dom.alignInput.value = M.props.align
+  dom.baselineInput.value = M.props.baseline
 
+  dom.rrInput.value = String(M.props.rr)
   dom.rrValue.innerHTML = String(M.props.rr)
   dom.dprValue.innerHTML = String(window.devicePixelRatio)
   dom.canvasSizeValue.innerHTML = `${M.props.rw.toFixed(
@@ -170,12 +218,12 @@ const initInputValues = () => {
   ).toFixed(1)}`
   dom.zoomValue.innerHTML = String(M.props.scaleMp)
 
-  dom.lineInputs.blAlign.color.value = M.props.lines.blAlign.color
-  dom.lineInputs.blAlign.width.value = String(M.props.lines.blAlign.width)
-  dom.lineInputs.fontBb.color.value = M.props.lines.fontBb.color
-  dom.lineInputs.fontBb.width.value = String(M.props.lines.fontBb.width)
-  dom.lineInputs.actualBb.color.value = M.props.lines.actualBb.color
-  dom.lineInputs.actualBb.width.value = String(M.props.lines.actualBb.width)
+  dom.lineInputs.blAlign.color.value = M.props.style.blAlign.color
+  dom.lineInputs.blAlign.width.value = String(M.props.style.blAlign.width)
+  dom.lineInputs.fontBb.color.value = M.props.style.fontBb.color
+  dom.lineInputs.fontBb.width.value = String(M.props.style.fontBb.width)
+  dom.lineInputs.actualBb.color.value = M.props.style.actualBb.color
+  dom.lineInputs.actualBb.width.value = String(M.props.style.actualBb.width)
 }
 
 addEvents(M)

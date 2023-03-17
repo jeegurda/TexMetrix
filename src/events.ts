@@ -13,6 +13,11 @@ const addEvents = (M: Metrix) => {
     M.draw()
   })
 
+  dom.lhInput.addEventListener('input', (ev) => {
+    M.props.lh = Number(dom.lhInput.value)
+    M.draw()
+  })
+
   dom.alignInput.addEventListener('change', (ev) => {
     M.props.align = validateSelectValue<Align>(dom.alignInput.value, Align)
     M.draw()
@@ -116,27 +121,27 @@ const addEvents = (M: Metrix) => {
   })
 
   dom.lineInputs.blAlign.color.addEventListener('input', () => {
-    M.props.lines.blAlign.color = dom.lineInputs.blAlign.color.value
+    M.props.style.blAlign.color = dom.lineInputs.blAlign.color.value
     M.draw()
   })
   dom.lineInputs.blAlign.width.addEventListener('input', () => {
-    M.props.lines.blAlign.width = Number(dom.lineInputs.blAlign.width.value)
+    M.props.style.blAlign.width = Number(dom.lineInputs.blAlign.width.value)
     M.draw()
   })
   dom.lineInputs.fontBb.color.addEventListener('input', () => {
-    M.props.lines.fontBb.color = dom.lineInputs.fontBb.color.value
+    M.props.style.fontBb.color = dom.lineInputs.fontBb.color.value
     M.draw()
   })
-  dom.lineInputs.fontBb.color.addEventListener('input', () => {
-    M.props.lines.fontBb.width = Number(dom.lineInputs.fontBb.width.value)
-    M.draw()
-  })
-  dom.lineInputs.actualBb.color.addEventListener('input', () => {
-    M.props.lines.actualBb.color = dom.lineInputs.actualBb.color.value
+  dom.lineInputs.fontBb.width.addEventListener('input', () => {
+    M.props.style.fontBb.width = Number(dom.lineInputs.fontBb.width.value)
     M.draw()
   })
   dom.lineInputs.actualBb.color.addEventListener('input', () => {
-    M.props.lines.actualBb.width = Number(dom.lineInputs.actualBb.width.value)
+    M.props.style.actualBb.color = dom.lineInputs.actualBb.color.value
+    M.draw()
+  })
+  dom.lineInputs.actualBb.width.addEventListener('input', () => {
+    M.props.style.actualBb.width = Number(dom.lineInputs.actualBb.width.value)
     M.draw()
   })
 }
