@@ -5,7 +5,7 @@ import './style.css'
 import { addEvents } from './events'
 import { te } from './utils'
 
-const ff = 'sans-serif' // TODO: move to input
+const ff = 'serif' // TODO: move to input
 
 const ctx = dom.canvas.getContext('2d') ?? te('ctx died')
 

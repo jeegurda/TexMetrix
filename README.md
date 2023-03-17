@@ -14,7 +14,7 @@ $ npx serve build/  # 'serve' not included, just as an example
 
 ```bash
 $ npm i
-$ npm run dev  # runs at http://localhost:3000
+$ npm run serve  # runs at http://localhost:3000
 ```
 
 ### todo:
