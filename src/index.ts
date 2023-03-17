@@ -6,35 +6,38 @@ import { addEvents } from './events'
 import { te } from './utils'
 import { updateDom } from './update-dom'
 
-const ff = 'serif' // TODO: move to input
 const mlOffset = 30
 const mtOffset = 10
 
 const ctx = dom.canvas.getContext('2d') ?? te('ctx died')
 
 const M: Metrix = {
-  props: {
-    rw: 0,
-    rh: 0,
-
-    drawX: 100,
-    drawY: dom.canvas.clientHeight - 100,
-
-    scaleMp: 1,
-
-    text: 'my honest reaction 😅👌🏽',
-    fs: 60,
+  text: 'my honest reaction 😅👌🏽',
+  font: {
+    fs: 'normal',
+    fw: 'normal',
+    ff: 'serif',
+    size: 60,
     lh: 80,
     align: Align.START,
     baseline: Baseline.ALPHABETIC,
+  },
+  props: {
+    rw: 0,
+    rh: 0,
+    drawX: 100,
+    drawY: dom.canvas.clientHeight - 100,
+    scaleMp: 1,
     rr: window.devicePixelRatio,
     style: {
       blAlign: { color: '#c800c8', width: 0.5, display: true },
       fontBb: { color: '#f00000', width: 0.5, display: true },
       actualBb: { color: '#000000', width: 0.5, display: true },
     },
-
-    rest: {},
+    shared: {
+      cw: 0,
+      ch: 0,
+    },
   },
   draw: () => {},
   init: () => {},
@@ -52,8 +55,8 @@ const init = () => {
 
   ctx.scale(M.props.rr * M.props.scaleMp, M.props.rr * M.props.scaleMp)
 
-  M.props.rest.cw = cw
-  M.props.rest.ch = ch
+  M.props.shared.cw = cw
+  M.props.shared.ch = ch
 }
 
 let af: number | null = null
@@ -64,12 +67,12 @@ const draw = () => {
 }
 
 const drawSync = () => {
-  const { rw, rh, lh } = M.props
+  const { rw, rh } = M.props
 
   const drawText = (line: string, dx: number, dy: number) => {
-    ctx.textAlign = M.props.align
-    ctx.textBaseline = M.props.baseline
-    ctx.font = `${M.props.fs}px ${ff}`
+    ctx.textAlign = M.font.align
+    ctx.textBaseline = M.font.baseline
+    ctx.font = `${M.font.fs} ${M.font.fw} ${M.font.size}px ${M.font.ff}`
     ctx.fillText(line, dx, dy)
   }
 
@@ -157,7 +160,7 @@ const drawSync = () => {
     // measuring line text
     ctx.textAlign = 'center'
     ctx.textBaseline = 'bottom'
-    ctx.font = `${M.props.fs / 2}px sans-serif`
+    ctx.font = `${M.font.fs} ${M.font.fw} ${M.font.size / 2}px ${M.font.ff}`
 
     const w = mets.actualBoundingBoxLeft + mets.actualBoundingBoxRight
     const horX = dx - mets.actualBoundingBoxLeft + w / 2
@@ -174,16 +177,16 @@ const drawSync = () => {
     ctx.translate(-verX, -verY)
 
     // top point of text above hor line
-    lastMLYTop = horY - M.props.fs / 2
+    lastMLYTop = horY - M.font.size / 2
   }
 
   ctx.clearRect(0, 0, rw, rh)
 
-  const lines = M.props.text.split('\n')
+  const lines = M.text.split('\n')
 
   lines.forEach((line, idx) => {
     const dx = M.props.drawX
-    const dy = M.props.drawY + lh * idx
+    const dy = M.props.drawY + M.font.lh * idx
 
     drawText(line, dx, dy)
 
@@ -208,5 +211,3 @@ draw()
 updateDom(M)
 
 checkTMInterface()
-
-window.M = M

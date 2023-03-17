@@ -19,4 +19,4 @@ $ npm run serve  # runs at http://localhost:3000
 
 ### todo:
 
-- get font list in webkit browsers
+- get font list in chrome

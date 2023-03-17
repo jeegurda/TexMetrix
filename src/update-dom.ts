@@ -10,12 +10,20 @@ const updateCanvasRes = (M: Metrix) => {
     (M.props.rh * M.props.rr).toFixed(1)
 }
 
+const updateTextInputStyle = (M: Metrix) => {
+  dom.textInput.style.fontFamily = M.font.ff
+  dom.textInput.style.fontStyle = M.font.fs
+  dom.textInput.style.fontWeight = M.font.fw
+}
+
 const updateDom = (M: Metrix) => {
-  dom.textInput.value = M.props.text
-  dom.fontSizeInput.value = String(M.props.fs)
-  dom.lhInput.value = String(M.props.lh)
-  dom.alignInput.value = M.props.align
-  dom.baselineInput.value = M.props.baseline
+  dom.textInput.value = M.text
+  updateTextInputStyle(M)
+  dom.ffInput.value = String(M.font.ff)
+  dom.fontSizeInput.value = String(M.font.size)
+  dom.lhInput.value = String(M.font.lh)
+  dom.alignInput.value = M.font.align
+  dom.baselineInput.value = M.font.baseline
 
   dom.rrValue.innerHTML = String(M.props.rr)
   dom.dprValue.innerHTML = String(window.devicePixelRatio)
@@ -34,4 +42,4 @@ const updateDom = (M: Metrix) => {
   dom.lineStyle.actualBb.display.checked = M.props.style.actualBb.display
 }
 
-export { updateDom, updateCanvasRes }
+export { updateDom, updateCanvasRes, updateTextInputStyle }

@@ -20,6 +20,16 @@ export type LineStyle = {
 }
 
 export type Metrix = {
+  text: string
+  font: {
+    size: number
+    lh: number
+    align: Align
+    baseline: Baseline
+    fw: string
+    fs: string
+    ff: string
+  }
   props: {
     rw: number
     rh: number
@@ -29,11 +39,6 @@ export type Metrix = {
 
     scaleMp: number
 
-    text: string
-    fs: number
-    lh: number
-    align: Align
-    baseline: Baseline
     rr: number
     style: {
       actualBb: LineStyle
@@ -41,15 +46,11 @@ export type Metrix = {
       blAlign: LineStyle
     }
 
-    rest?: any // TEMP: remove
+    shared: {
+      cw: number
+      ch: number
+    }
   }
   draw: () => void
   init: () => void
-}
-
-declare global {
-  // TEMP: remove
-  interface Window {
-    M: Metrix
-  }
 }
