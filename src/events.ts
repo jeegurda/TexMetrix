@@ -9,7 +9,7 @@ const addEvents = (M: Metrix) => {
   })
 
   dom.fontSizeInput.addEventListener('input', (ev) => {
-    M.props.fs = parseInt(dom.fontSizeInput.value)
+    M.props.fs = Number(dom.fontSizeInput.value)
     M.draw()
   })
 
@@ -113,6 +113,31 @@ const addEvents = (M: Metrix) => {
 
     window.addEventListener('mousemove', handleMove)
     window.addEventListener('mouseup', handleUp)
+  })
+
+  dom.lineInputs.blAlign.color.addEventListener('input', () => {
+    M.props.lines.blAlign.color = dom.lineInputs.blAlign.color.value
+    M.draw()
+  })
+  dom.lineInputs.blAlign.width.addEventListener('input', () => {
+    M.props.lines.blAlign.width = Number(dom.lineInputs.blAlign.width.value)
+    M.draw()
+  })
+  dom.lineInputs.fontBb.color.addEventListener('input', () => {
+    M.props.lines.fontBb.color = dom.lineInputs.fontBb.color.value
+    M.draw()
+  })
+  dom.lineInputs.fontBb.color.addEventListener('input', () => {
+    M.props.lines.fontBb.width = Number(dom.lineInputs.fontBb.width.value)
+    M.draw()
+  })
+  dom.lineInputs.actualBb.color.addEventListener('input', () => {
+    M.props.lines.actualBb.color = dom.lineInputs.actualBb.color.value
+    M.draw()
+  })
+  dom.lineInputs.actualBb.color.addEventListener('input', () => {
+    M.props.lines.actualBb.width = Number(dom.lineInputs.actualBb.width.value)
+    M.draw()
   })
 }
 

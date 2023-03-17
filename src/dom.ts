@@ -1,54 +1,37 @@
 import { te } from './utils'
 
-const textInput = document.querySelector<HTMLTextAreaElement>('.text-input')
-const fontSizeInput =
-  document.querySelector<HTMLInputElement>('.font-size-input')
-const alignInput = document.querySelector<HTMLSelectElement>('.align-input')
-const baselineInput =
-  document.querySelector<HTMLSelectElement>('.baseline-input')
+const q = <T extends Element>(qs: string) =>
+  document.querySelector<T>(qs) ?? te(`dom el missing (selector: ${qs})`)
 
-const canvas = document.querySelector<HTMLCanvasElement>('.canvas canvas')
+const dom = {
+  textInput: q<HTMLTextAreaElement>('.text-input'),
+  fontSizeInput: q<HTMLInputElement>('.font-size-input'),
+  alignInput: q<HTMLSelectElement>('.align-input'),
+  baselineInput: q<HTMLSelectElement>('.baseline-input'),
 
-const rrValue = document.querySelector<HTMLSpanElement>('.rr-value')
-const dprValue = document.querySelector<HTMLSpanElement>('.dpr-value')
-const rrInput = document.querySelector<HTMLInputElement>('.rr-input')
-const canvasSizeValue =
-  document.querySelector<HTMLSpanElement>('.canvas-size-value')
-const renderPixelValue = document.querySelector<HTMLSpanElement>(
-  '.render-pixel-value',
-)
+  canvas: q<HTMLCanvasElement>('.canvas canvas'),
+  canvasUi: q<HTMLDivElement>('.canvas-ui'),
 
-const canvasUi = document.querySelector<HTMLDivElement>('.canvas-ui')
-
-const zoomValue = document.querySelector<HTMLSpanElement>('.zoom-value')
-
-const nullableDom = {
-  textInput,
-  fontSizeInput,
-  alignInput,
-  baselineInput,
-
-  canvas,
-
-  rrValue,
-  dprValue,
-  rrInput,
-  canvasSizeValue,
-  renderPixelValue,
-
-  zoomValue,
-
-  canvasUi,
+  rrValue: q<HTMLSpanElement>('.rr-value'),
+  dprValue: q<HTMLSpanElement>('.dpr-value'),
+  rrInput: q<HTMLInputElement>('.rr-input'),
+  canvasSizeValue: q<HTMLSpanElement>('.canvas-size-value'),
+  renderPixelValue: q<HTMLSpanElement>('.render-pixel-value'),
+  zoomValue: q<HTMLSpanElement>('.zoom-value'),
+  lineInputs: {
+    blAlign: {
+      color: q<HTMLInputElement>('.bl-align-color-input'),
+      width: q<HTMLInputElement>('.bl-align-width-input'),
+    },
+    fontBb: {
+      color: q<HTMLInputElement>('.font-color-input'),
+      width: q<HTMLInputElement>('.font-width-input'),
+    },
+    actualBb: {
+      color: q<HTMLInputElement>('.actual-color-input'),
+      width: q<HTMLInputElement>('.actual-width-input'),
+    },
+  },
 } as const
-
-Object.entries(nullableDom).forEach(([key, el]) => {
-  el ?? te(`dom el missing (${key})`)
-})
-
-type ExistingDom = {
-  [K in keyof typeof nullableDom]: NonNullable<typeof nullableDom[K]>
-}
-
-const dom = nullableDom as ExistingDom
 
 export { dom }

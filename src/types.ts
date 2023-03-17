@@ -13,6 +13,11 @@ export enum Baseline {
   TOP = 'top',
 }
 
+export type LineStyle = {
+  width: number
+  color: string
+}
+
 export type Metrix = {
   props: {
     rw: number
@@ -28,6 +33,11 @@ export type Metrix = {
     align: Align
     baseline: Baseline
     rr: number
+    lines: {
+      actualBb: LineStyle
+      fontBb: LineStyle
+      blAlign: LineStyle
+    }
 
     rest?: any // TEMP: remove
   }
