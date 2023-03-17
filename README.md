@@ -1,3 +1,7 @@
+Live: https://jeegurda.github.io/TexMetrix/
+
+---
+
 ### Build
 
 ```bash
