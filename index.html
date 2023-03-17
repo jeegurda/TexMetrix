@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>TexMetrix</title>
+    <link rel="icon" href="./favicon.ico" />
+    <link rel="stylesheet" href="./bundled/bundle.css" />
+    <script defer src="./bundled/bundle.js"></script>
+  </head>
+  <body>
+    <div class="layout">
+      <div class="text-parameters">
+        <div>Text</div>
+        <div>
+          <textarea class="text-input" autofocus rows="3"></textarea>
+        </div>
+        <div>Font-size</div>
+        <div>
+          <input
+            type="range"
+            min="6"
+            max="200"
+            value="60"
+            class="font-size-input"
+            step="1"
+          />
+        </div>
+        <div>Align</div>
+        <div>
+          <select class="align-input">
+            <option value="start">start</option>
+            <option value="center">center</option>
+            <option value="end">end</option>
+          </select>
+        </div>
+        <div>Baseline</div>
+        <div>
+          <select class="baseline-input">
+            <option value="top">top</option>
+            <option value="hanging">hanging</option>
+            <option value="middle">middle</option>
+            <option value="alphabetic">alphabetic</option>
+            <option value="ideographic">ideographic</option>
+            <option value="bottom">bottom</option>
+          </select>
+        </div>
+      </div>
+      <div class="canvas">
+        <canvas>Canvas</canvas>
+        <div class="canvas-ui"></div>
+      </div>
+      <div class="canvas-parameters">
+        <div>
+          Render res: x<span class="rr-value">0</span> (dpr:
+          <span class="dpr-value">0</span>)
+        </div>
+        <div>
+          <input type="range" min="1" max="10" value="0" class="rr-input" />
+        </div>
+        <div>Canvas res: <span class="canvas-size-value">0</span></div>
+        <div>Render res: <span class="render-pixel-value">0</span></div>
+        <div>Zoom: <span class="zoom-value">0</span></div>
+        <div>
+          <div>Baseline/align</div>
+          <div>
+            <input type="color" class="bl-align-color-input" />
+            <input
+              type="number"
+              class="bl-align-width-input"
+              min="0.5"
+              max="5"
+              step="0.5"
+            />
+          </div>
+        </div>
+        <div>
+          <div>Font bounding box:</div>
+          <div>
+            <input type="color" class="font-color-input" />
+            <input
+              type="number"
+              class="font-width-input"
+              min="0.5"
+              max="5"
+              step="0.5"
+            />
+          </div>
+        </div>
+        <div>
+          <div>Actual bounding box:</div>
+          <div>
+            <input type="color" class="actual-color-input" />
+            <input
+              type="number"
+              class="actual-width-input"
+              min="0.5"
+              max="5"
+              step="0.5"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

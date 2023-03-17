@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/style.css"],
+  "sourcesContent": ["body {\n  margin: 0;\n  font: 16px sans-serif;\n}\n\n.layout {\n  width: 100vw;\n  height: 100vh;\n  display: grid;\n  grid: auto / 350px 1fr 250px;\n  align-items: flex-start;\n}\n\n.text-parameters {\n  grid: auto / auto 1fr;\n  display: grid;\n}\n\n.text-parameters > div {\n  padding: 15px 20px;\n}\n\n.text-parameters > div:not(:nth-last-child(-n + 2)) {\n  border-bottom: 1px solid rgba(0, 0, 0, 0.1);\n}\n\n.canvas {\n  border-left: 1px solid rgba(0, 0, 0, 0.4);\n  border-right: 1px solid rgba(0, 0, 0, 0.4);\n  align-self: stretch;\n  overflow: hidden;\n  position: relative;\n}\n\n.canvas canvas {\n  width: 100%;\n  height: 100%;\n  display: block;\n}\n\n.canvas-ui {\n  position: absolute;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  cursor: grab;\n}\n\n.canvas-ui.grabbing {\n  cursor: grabbing;\n}\n\n.canvas-parameters {\n  display: grid;\n  grid: auto / auto;\n}\n\n.canvas-parameters > div:first-child {\n  padding: 15px 20px 5px;\n}\n\n.canvas-parameters > div:not(:first-child):not(:last-child) {\n  padding: 5px 20px 5px;\n}\n\n.canvas-parameters > div:last-child {\n  padding: 5px 20px 5px;\n}\n"],
+  "mappings": "AAAA,cAEE,qBAGF,QACE,YACA,aACA,aACA,4BACA,uBAGF,iBACE,qBACA,aAGF,qBAlBA,kBAsBA,kDACE,uCAGF,QACE,qCACA,sCACA,mBACA,gBACA,kBAGF,eACE,WACA,YACA,cAGF,WACE,kBACA,OACA,MACA,WACA,YACA,YAGF,oBACE,gBAGF,mBACE,aACA,iBAGF,mCA1DA,sBA8DA,0DA9DA,iBAkEA,kCAlEA",
+  "names": []
+}
