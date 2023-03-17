@@ -4,6 +4,7 @@ import { dom } from './dom'
 import './style.css'
 import { addEvents } from './events'
 import { te } from './utils'
+import { updateDom } from './update-dom'
 
 const ff = 'serif' // TODO: move to input
 const mlOffset = 30
@@ -28,9 +29,9 @@ const M: Metrix = {
     baseline: Baseline.ALPHABETIC,
     rr: window.devicePixelRatio,
     style: {
-      blAlign: { color: '#c800c8', width: 0.5 },
-      fontBb: { color: '#f00000', width: 0.5 },
-      actualBb: { color: '#000000', width: 0.5 },
+      blAlign: { color: '#c800c8', width: 0.5, display: true },
+      fontBb: { color: '#f00000', width: 0.5, display: true },
+      actualBb: { color: '#000000', width: 0.5, display: true },
     },
 
     rest: {},
@@ -188,49 +189,23 @@ const drawSync = () => {
 
     ctx.globalAlpha = 0.5
     const mets = ctx.measureText(line)
-    drawBlAlign(idx, dx, dy)
-    drawFontBb(idx, mets, dx, dy)
-    drawActualBb(idx, mets, dx, dy)
+    M.props.style.blAlign.display && drawBlAlign(idx, dx, dy)
+    M.props.style.fontBb.display && drawFontBb(idx, mets, dx, dy)
+    M.props.style.actualBb.display && drawActualBb(idx, mets, dx, dy)
     ctx.globalAlpha = 1
 
-    drawMl(idx, mets, dx, dy)
+    M.props.style.actualBb.display && drawMl(idx, mets, dx, dy)
   })
 }
 
 M.draw = draw
 M.init = init
 
-const initInputValues = () => {
-  dom.textInput.value = M.props.text
-  dom.fontSizeInput.value = String(M.props.fs)
-  dom.lhInput.value = String(M.props.lh)
-  dom.alignInput.value = M.props.align
-  dom.baselineInput.value = M.props.baseline
-
-  dom.rrInput.value = String(M.props.rr)
-  dom.rrValue.innerHTML = String(M.props.rr)
-  dom.dprValue.innerHTML = String(window.devicePixelRatio)
-  dom.canvasSizeValue.innerHTML = `${M.props.rw.toFixed(
-    1,
-  )}x${M.props.rh.toFixed(1)}`
-  dom.renderPixelValue.innerHTML = `${(M.props.rw * M.props.rr).toFixed(1)}x${(
-    M.props.rh * M.props.rr
-  ).toFixed(1)}`
-  dom.zoomValue.innerHTML = String(M.props.scaleMp)
-
-  dom.lineInputs.blAlign.color.value = M.props.style.blAlign.color
-  dom.lineInputs.blAlign.width.value = String(M.props.style.blAlign.width)
-  dom.lineInputs.fontBb.color.value = M.props.style.fontBb.color
-  dom.lineInputs.fontBb.width.value = String(M.props.style.fontBb.width)
-  dom.lineInputs.actualBb.color.value = M.props.style.actualBb.color
-  dom.lineInputs.actualBb.width.value = String(M.props.style.actualBb.width)
-}
-
 addEvents(M)
 
 init()
 draw()
-initInputValues()
+updateDom(M)
 
 checkTMInterface()
 

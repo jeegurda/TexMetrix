@@ -19,18 +19,21 @@ const dom = {
   canvasSizeValue: q<HTMLSpanElement>('.canvas-size-value'),
   renderPixelValue: q<HTMLSpanElement>('.render-pixel-value'),
   zoomValue: q<HTMLSpanElement>('.zoom-value'),
-  lineInputs: {
+  lineStyle: {
     blAlign: {
       color: q<HTMLInputElement>('.bl-align-color-input'),
       width: q<HTMLInputElement>('.bl-align-width-input'),
+      display: q<HTMLInputElement>('.bl-align-display-input'),
     },
     fontBb: {
       color: q<HTMLInputElement>('.font-color-input'),
       width: q<HTMLInputElement>('.font-width-input'),
+      display: q<HTMLInputElement>('.font-display-input'),
     },
     actualBb: {
       color: q<HTMLInputElement>('.actual-color-input'),
       width: q<HTMLInputElement>('.actual-width-input'),
+      display: q<HTMLInputElement>('.actual-display-input'),
     },
   },
 } as const

@@ -16,6 +16,7 @@ export enum Baseline {
 export type LineStyle = {
   width: number
   color: string
+  display: boolean
 }
 
 export type Metrix = {
