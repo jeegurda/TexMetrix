@@ -139,12 +139,15 @@ const drawSync = () => {
   let lastMLYTop = 0
 
   const drawMl = (idx: number, mets: TextMetrics, dx: number, dy: number) => {
-    const yBase = idx === 0 ? dy - mets.actualBoundingBoxAscent : lastMLYTop
-
     // measuring line
     const m = new Path2D()
-    const horMLY = yBase - mlOffset / M.props.scaleMp
-    const verMLx = dx + mets.actualBoundingBoxRight + mlOffset / M.props.scaleMp
+    const totalMlOffset = mlOffset / M.props.scaleMp
+    const totalMtOffset = mtOffset / M.props.scaleMp
+
+    const horMLY =
+      (idx === 0 ? dy - mets.actualBoundingBoxAscent : lastMLYTop) -
+      totalMlOffset
+    const verMLx = dx + mets.actualBoundingBoxRight + totalMlOffset
 
     m.moveTo(dx - mets.actualBoundingBoxLeft, horMLY)
     m.lineTo(dx + mets.actualBoundingBoxRight, horMLY)
@@ -164,11 +167,11 @@ const drawSync = () => {
 
     const w = mets.actualBoundingBoxLeft + mets.actualBoundingBoxRight
     const horX = dx - mets.actualBoundingBoxLeft + w / 2
-    const horY = horMLY - mtOffset / M.props.scaleMp
+    const horY = horMLY - totalMtOffset
     ctx.fillText(`${w.toFixed(1)}px`, horX, horY)
 
     const h = mets.actualBoundingBoxAscent + mets.actualBoundingBoxDescent
-    const verX = verMLx + mtOffset / M.props.scaleMp
+    const verX = verMLx + totalMtOffset
     const verY = dy - mets.actualBoundingBoxAscent + h / 2
     ctx.translate(verX, verY)
     ctx.rotate(90 / (180 / Math.PI))

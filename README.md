@@ -20,3 +20,5 @@ $ npm run serve  # runs at http://localhost:3000
 ### todo:
 
 - get font list in chrome
+- add safari-supported props
+- is width even needed?
