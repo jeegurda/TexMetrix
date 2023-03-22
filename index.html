@@ -13,31 +13,29 @@
         <div>
           <textarea class="text-input" autofocus rows="3"></textarea>
         </div>
-        <div>Font-family:</div>
-        <div>
-          <select class="font-family-input">
-            <option value="serif">serif</option>
-            <option value="sans-serif">sans-serif</option>
-            <option value="monospace">monospace</option>
-          </select>
+        <div class="ff-header">
+          <span>Font-family:</span>
+          <button class="local-fonts-button">Load local fonts</button>
         </div>
-        <div>Font-size:</div>
+        <div>
+          <select class="font-family-input"></select>
+        </div>
+        <div>Font-size: <span class="font-size-value">0</span></div>
         <div>
           <input
             type="range"
-            min="6"
-            max="200"
+            min="1"
+            max="500"
             value="0"
             class="font-size-input"
-            step="1"
           />
         </div>
-        <div>Line-height:</div>
+        <div>Line-height: <span class="line-height-value">0</span></div>
         <div>
           <input
-            type="number"
+            type="range"
             min="0"
-            max="200"
+            max="1000"
             value="0"
             class="line-height-input"
           />
