@@ -15,6 +15,21 @@ const addEvents = (M: Metrix) => {
     M.draw()
   })
 
+  dom.localFontsButton.addEventListener('click', async () => {
+    if (window.queryLocalFonts) {
+      window
+        .queryLocalFonts()
+        .then((data: any) => {
+          console.log(data)
+        })
+        .catch((reason: any) => {
+          console.error(reason)
+        })
+    } else {
+      console.warn('Local fonts not supported')
+    }
+  })
+
   dom.fontSizeInput.addEventListener('input', () => {
     M.font.size = Number(dom.fontSizeInput.value)
     M.draw()

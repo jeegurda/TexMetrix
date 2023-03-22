@@ -54,3 +54,7 @@ export type Metrix = {
   draw: () => void
   init: () => void
 }
+
+declare global {
+  var queryLocalFonts: () => Promise<any>
+}
