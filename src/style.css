@@ -40,6 +40,22 @@ body {
   font: inherit;
 }
 
+.ff-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: middle;
+}
+
+.font-size-input {
+  width: 100%;
+  margin: 0;
+}
+
+.line-height-input {
+  width: 100%;
+  margin: 0;
+}
+
 .canvas {
   border-left: 1px solid rgba(0, 0, 0, 0.4);
   border-right: 1px solid rgba(0, 0, 0, 0.4);

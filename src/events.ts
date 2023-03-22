@@ -1,6 +1,10 @@
 import { dom } from './dom'
-import { Align, Baseline, Metrix } from './types'
-import { updateCanvasRes, updateTextInputStyle } from './update-dom'
+import { Align, Baseline, FontData, Metrix } from './types'
+import {
+  updateCanvasRes,
+  updateLocalFonts,
+  updateTextInputStyle,
+} from './update-dom'
 import { validateSelectValue } from './utils'
 
 const addEvents = (M: Metrix) => {
@@ -19,11 +23,17 @@ const addEvents = (M: Metrix) => {
     if (window.queryLocalFonts) {
       window
         .queryLocalFonts()
-        .then((data: any) => {
-          console.log(data)
+        .then((data: FontData[]) => {
+          if (data.length === 0) {
+            console.warn(
+              'Empty array, premission denied. Enable manually in browser',
+            )
+          } else {
+            updateLocalFonts(M, data)
+          }
         })
-        .catch((reason: any) => {
-          console.error(reason)
+        .catch((reason: Error) => {
+          console.error('Local fonts query failed: %o', reason)
         })
     } else {
       console.warn('Local fonts not supported')
@@ -32,11 +42,13 @@ const addEvents = (M: Metrix) => {
 
   dom.fontSizeInput.addEventListener('input', () => {
     M.font.size = Number(dom.fontSizeInput.value)
+    dom.fontSizeValue.innerHTML = dom.fontSizeInput.value
     M.draw()
   })
 
   dom.lhInput.addEventListener('input', () => {
     M.font.lh = Number(dom.lhInput.value)
+    dom.lhValue.innerHTML = dom.lhInput.value
     M.draw()
   })
 

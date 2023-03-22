@@ -55,6 +55,14 @@ export type Metrix = {
   init: () => void
 }
 
+export type FontData = {
+  family: string
+  fullName: string
+  postscriptName: string
+  style: string
+  blob: () => Promise<Blob>
+}
+
 declare global {
-  var queryLocalFonts: () => Promise<any>
+  var queryLocalFonts: (() => Promise<FontData[]>) | undefined
 }

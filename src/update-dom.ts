@@ -1,5 +1,6 @@
+import { ffList, ffLocalList } from './common'
 import { dom } from './dom'
-import { Metrix } from './types'
+import { FontData, Metrix } from './types'
 
 const updateCanvasRes = (M: Metrix) => {
   dom.canvasSizeValue.innerHTML =
@@ -16,12 +17,28 @@ const updateTextInputStyle = (M: Metrix) => {
   dom.textInput.style.fontWeight = M.font.fw
 }
 
+const updateFF = (M: Metrix) => {
+  const getOpts = (list: string[]) => {
+    return list.map((ff) => {
+      const opt = document.createElement('option')
+      opt.value = ff
+      opt.innerHTML = ff
+      return opt
+    })
+  }
+  dom.ffInput.innerHTML = ''
+  dom.ffInput.append(...getOpts(ffList), ...getOpts(ffLocalList))
+  dom.ffInput.value = String(M.font.ff)
+}
+
 const updateDom = (M: Metrix) => {
   dom.textInput.value = M.text
   updateTextInputStyle(M)
-  dom.ffInput.value = String(M.font.ff)
+  updateFF(M)
   dom.fontSizeInput.value = String(M.font.size)
+  dom.fontSizeValue.innerHTML = String(M.font.size)
   dom.lhInput.value = String(M.font.lh)
+  dom.lhValue.innerHTML = String(M.font.lh)
   dom.alignInput.value = M.font.align
   dom.baselineInput.value = M.font.baseline
 
@@ -42,4 +59,10 @@ const updateDom = (M: Metrix) => {
   dom.lineStyle.actualBb.display.checked = M.props.style.actualBb.display
 }
 
-export { updateDom, updateCanvasRes, updateTextInputStyle }
+const updateLocalFonts = (M: Metrix, data: FontData[]) => {
+  const lff = data.map((font) => font.fullName)
+  ffLocalList.splice(0, ffLocalList.length, ...lff)
+  updateFF(M)
+}
+
+export { updateDom, updateCanvasRes, updateTextInputStyle, updateLocalFonts }

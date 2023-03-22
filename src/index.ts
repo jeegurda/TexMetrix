@@ -5,6 +5,7 @@ import './style.css'
 import { addEvents } from './events'
 import { te } from './utils'
 import { updateDom } from './update-dom'
+import { ffList } from './common'
 
 const mlOffset = 30
 const mtOffset = 10
@@ -16,7 +17,7 @@ const M: Metrix = {
   font: {
     fs: 'normal',
     fw: 'normal',
-    ff: 'serif',
+    ff: ffList[0],
     size: 60,
     lh: 80,
     align: Align.START,

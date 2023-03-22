@@ -8,7 +8,9 @@ const dom = {
   ffInput: q<HTMLInputElement>('.font-family-input'),
   localFontsButton: q<HTMLButtonElement>('.local-fonts-button'),
   fontSizeInput: q<HTMLInputElement>('.font-size-input'),
+  fontSizeValue: q<HTMLSpanElement>('.font-size-value'),
   lhInput: q<HTMLInputElement>('.line-height-input'),
+  lhValue: q<HTMLSpanElement>('.line-height-value'),
   alignInput: q<HTMLSelectElement>('.align-input'),
   baselineInput: q<HTMLSelectElement>('.baseline-input'),
 
