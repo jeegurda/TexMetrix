@@ -18,7 +18,7 @@ const updateTextInputStyle = (M: Metrix) => {
 }
 
 const updateFF = (M: Metrix) => {
-  const getOpts = (list: string[]) => {
+  const getOpts = (list: readonly string[]) => {
     return list.map((ff) => {
       const opt = document.createElement('option')
       opt.value = ff

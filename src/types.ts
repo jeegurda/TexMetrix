@@ -26,8 +26,8 @@ export type Metrix = {
     lh: number
     align: Align
     baseline: Baseline
-    fw: string
-    fs: string
+    readonly fw: string
+    readonly fs: string
     ff: string
   }
   props: {
@@ -55,13 +55,13 @@ export type Metrix = {
   init: () => void
 }
 
-export type FontData = {
+export type FontData = Readonly<{
   family: string
   fullName: string
   postscriptName: string
   style: string
   blob: () => Promise<Blob>
-}
+}>
 
 declare global {
   var queryLocalFonts: (() => Promise<FontData[]>) | undefined

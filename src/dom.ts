@@ -1,6 +1,6 @@
 import { te } from './utils'
 
-const q = <T extends Element>(qs: string) =>
+const q = <T extends Element = Element>(qs: string) =>
   document.querySelector<T>(qs) ?? te(`dom el missing (selector: ${qs})`)
 
 const dom = {
