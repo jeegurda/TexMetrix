@@ -55,11 +55,13 @@ export type Metrix = {
   init: () => void
 }
 
+type FontStyle = 'Regular' | 'Bold' | 'Italic'
+
 export type FontData = Readonly<{
   family: string
   fullName: string
   postscriptName: string
-  style: string
+  style: FontStyle
   blob: () => Promise<Blob>
 }>
 

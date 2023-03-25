@@ -3,9 +3,9 @@ import { Align, Baseline, Metrix } from './types'
 import { dom } from './dom'
 import './style.css'
 import { addEvents } from './events'
-import { te } from './utils'
+import { getFontString, te } from './utils'
 import { updateDom } from './update-dom'
-import { ffList } from './common'
+import { ffList, fsList, fwList } from './common'
 
 const mlOffset = 30
 const mtOffset = 10
@@ -15,8 +15,8 @@ const ctx = dom.canvas.getContext('2d') ?? te('ctx died')
 const M: Metrix = {
   text: 'my honest reaction 😅👌🏽',
   font: {
-    fs: 'normal',
-    fw: 'normal',
+    fs: fsList[0],
+    fw: fwList[0],
     ff: ffList[0],
     size: 60,
     lh: 80,
@@ -73,7 +73,7 @@ const drawSync = () => {
   const drawText = (line: string, dx: number, dy: number) => {
     ctx.textAlign = M.font.align
     ctx.textBaseline = M.font.baseline
-    ctx.font = `${M.font.fs} ${M.font.fw} ${M.font.size}px ${M.font.ff}`
+    ctx.font = getFontString(M.font.size, M.font.ff, M.font.fw, M.font.fs)
     ctx.fillText(line, dx, dy)
   }
 
@@ -164,7 +164,7 @@ const drawSync = () => {
     // measuring line text
     ctx.textAlign = 'center'
     ctx.textBaseline = 'bottom'
-    ctx.font = `${M.font.fs} ${M.font.fw} ${M.font.size / 2}px ${M.font.ff}`
+    ctx.font = getFontString(M.font.size / 2, M.font.ff, M.font.fw, M.font.fs)
 
     const w = mets.actualBoundingBoxLeft + mets.actualBoundingBoxRight
     const horX = dx - mets.actualBoundingBoxLeft + w / 2

@@ -37,4 +37,33 @@ const te: (msg?: string, err?: ErrorConstructor) => never = (
   throw new err(msg)
 }
 
-export { debounce, validateSelectValue, te }
+const getFontString = (
+  size: number,
+  ff: string,
+  fw: string,
+  fs: string,
+): string => {
+  switch (fs) {
+    case 'Normal':
+    case 'Italic':
+      fs = fs.toLowerCase()
+      break
+    default:
+      console.warn('Unknown fs: %o. Using normal', fw)
+      fs = 'normal'
+  }
+  switch (fw) {
+    case 'Regular':
+      fw = 'normal'
+      break
+    case 'Bold':
+      fw = fw.toLowerCase()
+    default:
+      console.warn('Unknown fw: %o. Using normal', fw)
+      fw = 'normal'
+  }
+
+  return `${fs} ${fw} ${size}px ${ff}`
+}
+
+export { debounce, validateSelectValue, te, getFontString }
