@@ -1,21 +1,16 @@
-const defFontData = [
-  { fullName: 'serif', family: 'serif', style: 'Regular' },
-  { fullName: 'serif', family: 'serif', style: 'Bold' },
-  { fullName: 'serif', family: 'serif', style: 'Italic' },
-  { fullName: 'sans-serif', family: 'sans-serif', style: 'Regular' },
-  { fullName: 'sans-serif', family: 'sans-serif', style: 'Bold' },
-  { fullName: 'sans-serif', family: 'sans-serif', style: 'Italic' },
-  { fullName: 'monospace', family: 'monospace', style: 'Regular' },
-  { fullName: 'monospace', family: 'monospace', style: 'Bold' },
-  { fullName: 'monospace', family: 'monospace', style: 'Italic' },
+import { BuiltinFontData, FontData } from './types'
+
+export const builtinFontData: readonly BuiltinFontData[] = [
+  { family: 'serif', style: 'Regular' },
+  { family: 'serif', style: 'Bold' },
+  { family: 'serif', style: 'Italic' },
+  { family: 'sans-serif', style: 'Regular' },
+  { family: 'sans-serif', style: 'Bold' },
+  { family: 'sans-serif', style: 'Italic' },
+  { family: 'monospace', style: 'Regular' },
+  { family: 'monospace', style: 'Bold' },
+  { family: 'monospace', style: 'Italic' },
 ] as const
 
-// TODO: these three should be generated from the arr above
-export const ffList = ['serif', 'sans-serif', 'monospace'] as const
-
-export const fwList = ['Regular', 'Bold'] as const
-
-export const fsList = ['Normal', 'Italic'] as const
-
 // array is mutable
-export const ffLocalList: string[] = []
+export const localFontData: FontData[] = []

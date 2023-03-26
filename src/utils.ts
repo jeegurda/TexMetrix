@@ -1,4 +1,11 @@
-import { Align, Baseline } from './types'
+import {
+  Align,
+  Baseline,
+  BuiltinFontData,
+  FontMap,
+  FsEnum,
+  FwEnum,
+} from './types'
 
 const debounce = (fn: (...args: unknown[]) => unknown, delay: number) => {
   let t: null | number = null
@@ -14,10 +21,10 @@ const debounce = (fn: (...args: unknown[]) => unknown, delay: number) => {
 
 const validateSelectValue = <T>(
   value: string,
-  enumObj: typeof Align | typeof Baseline,
+  enumObj: typeof Align | typeof Baseline | typeof FwEnum | typeof FsEnum,
 ): T => {
   const values: string[] = Object.values(enumObj)
-  // const valuesStr: string[] = values
+
   if (values.includes(value)) {
     return value as T
   }
@@ -58,6 +65,7 @@ const getFontString = (
       break
     case 'Bold':
       fw = fw.toLowerCase()
+      break
     default:
       console.warn('Unknown fw: %o. Using normal', fw)
       fw = 'normal'
@@ -66,4 +74,46 @@ const getFontString = (
   return `${fs} ${fw} ${size}px ${ff}`
 }
 
-export { debounce, validateSelectValue, te, getFontString }
+const getFonts = (fd: readonly BuiltinFontData[]) => {
+  const fontMap: FontMap = fd.reduce((acc, c) => {
+    let record =
+      acc[c.family] || (acc[c.family] = { fs: [FsEnum.NORMAL], fw: [] })
+
+    switch (c.style) {
+      case 'Italic':
+        record.fs ?? (record.fs = [])
+        record.fs.push(FsEnum.ITALIC)
+        break
+      case 'Bold':
+        record.fw ?? (record.fw = [])
+        record.fw.push(FwEnum.BOLD)
+        break
+      case 'Regular':
+        // skip (for font-style only) - assume every font a non-cursive variant (defined at initialization)
+
+        record.fw ?? (record.fw = [])
+        record.fw.push(FwEnum.REGULAR)
+        break
+      default:
+        console.warn('Unknown "style" for setting font-style: %o', c.style)
+    }
+
+    return acc
+  }, {} as FontMap)
+
+  const validateFontMap = (fm: FontMap) => {
+    Object.entries(fm).forEach(([k, v]) => {
+      if (v) {
+        if (v.fw.length === 1) {
+          console.warn('%o font record has only 1 weight')
+        }
+      } else {
+        console.warn('%o font record missing value')
+      }
+    })
+  }
+
+  return fontMap
+}
+
+export { debounce, validateSelectValue, te, getFontString, getFonts }

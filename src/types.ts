@@ -26,8 +26,8 @@ export type Metrix = {
     lh: number
     align: Align
     baseline: Baseline
-    readonly fw: string
-    readonly fs: string
+    fw: FwEnum
+    fs: FsEnum
     ff: string
   }
   props: {
@@ -55,15 +55,39 @@ export type Metrix = {
   init: () => void
 }
 
-type FontStyle = 'Regular' | 'Bold' | 'Italic'
+export type FDFontStyle = 'Regular' | 'Bold' | 'Italic'
 
 export type FontData = Readonly<{
   family: string
   fullName: string
   postscriptName: string
-  style: FontStyle
+  style: FDFontStyle
   blob: () => Promise<Blob>
 }>
+
+export enum FsEnum {
+  NORMAL = 'Normal',
+  ITALIC = 'Italic',
+}
+
+export enum FwEnum {
+  REGULAR = 'Regular',
+  BOLD = 'Bold',
+}
+
+export type BuiltinFontData = Readonly<{
+  family: string
+  style: FDFontStyle
+}>
+
+export type FontMap = {
+  [key: string]:
+    | {
+        fs: FsEnum[]
+        fw: FwEnum[]
+      }
+    | undefined
+}
 
 declare global {
   var queryLocalFonts: (() => Promise<FontData[]>) | undefined

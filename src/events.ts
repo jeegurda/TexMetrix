@@ -1,5 +1,5 @@
 import { dom } from './dom'
-import { Align, Baseline, FontData, Metrix } from './types'
+import { Align, Baseline, FontData, FsEnum, FwEnum, Metrix } from './types'
 import {
   updateCanvasRes,
   updateLocalFonts,
@@ -19,6 +19,18 @@ const addEvents = (M: Metrix) => {
     M.draw()
   })
 
+  dom.fwInput.addEventListener('change', () => {
+    M.font.fw = validateSelectValue(dom.fwInput.value, FwEnum)
+    updateTextInputStyle(M)
+    M.draw()
+  })
+
+  dom.fsInput.addEventListener('change', () => {
+    M.font.fs = validateSelectValue(dom.fsInput.value, FsEnum)
+    updateTextInputStyle(M)
+    M.draw()
+  })
+
   dom.localFontsButton.addEventListener('click', async () => {
     if (window.queryLocalFonts) {
       window
@@ -26,7 +38,7 @@ const addEvents = (M: Metrix) => {
         .then((data: FontData[]) => {
           if (data.length === 0) {
             console.warn(
-              'Empty array, premission denied. Enable manually in browser',
+              'Empty array, permission denied. Enable manually in browser',
             )
           } else {
             updateLocalFonts(M, data)
@@ -53,7 +65,7 @@ const addEvents = (M: Metrix) => {
   })
 
   dom.alignInput.addEventListener('change', () => {
-    M.font.align = validateSelectValue<Align>(dom.alignInput.value, Align)
+    M.font.align = validateSelectValue(dom.alignInput.value, Align)
     M.draw()
   })
 

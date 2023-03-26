@@ -1,6 +1,7 @@
-import { ffList, ffLocalList, fsList, fwList } from './common'
+import { builtinFontData, localFontData } from './common'
 import { dom } from './dom'
-import { FontData, Metrix } from './types'
+import { BuiltinFontData, FontData, FontMap, Metrix } from './types'
+import { getFonts, te } from './utils'
 
 const updateCanvasRes = (M: Metrix) => {
   dom.canvasSizeValue.innerHTML =
@@ -18,24 +19,35 @@ const updateTextInputStyle = (M: Metrix) => {
 }
 
 const updateFfFwFs = (M: Metrix) => {
-  const getOpts = (list: readonly string[]) => {
-    return list.map((optValue) => {
+  const getOptsFromArr = (arr: string[]): HTMLOptionElement[] => {
+    return arr.map((a) => {
       const opt = document.createElement('option')
-      opt.value = optValue
-      opt.innerHTML = optValue
+      opt.value = a
+      opt.innerHTML = a
       return opt
     })
   }
+
+  const builtinFm = getFonts(builtinFontData)
+  const localFm = getFonts(localFontData)
+
+  const merged = {
+    ...builtinFm,
+    ...localFm,
+  }
+
   dom.ffInput.innerHTML = ''
-  dom.ffInput.append(...getOpts(ffList), ...getOpts(ffLocalList))
+  dom.ffInput.append(...getOptsFromArr(Object.keys(merged)))
   dom.ffInput.value = M.font.ff
 
+  const record = merged[M.font.ff] ?? te('Selected font-family is not in array')
+
   dom.fwInput.innerHTML = ''
-  dom.fwInput.append(...getOpts(fwList))
+  dom.fwInput.append(...getOptsFromArr(record.fw))
   dom.fwInput.value = M.font.fw
 
   dom.fsInput.innerHTML = ''
-  dom.fsInput.append(...getOpts(fsList))
+  dom.fsInput.append(...getOptsFromArr(record.fs))
   dom.fsInput.value = M.font.fs
 }
 
@@ -68,8 +80,7 @@ const updateDom = (M: Metrix) => {
 }
 
 const updateLocalFonts = (M: Metrix, data: FontData[]) => {
-  const lff = data.map((font) => font.fullName)
-  ffLocalList.splice(0, ffLocalList.length, ...lff)
+  localFontData.splice(0, localFontData.length, ...data)
   updateFfFwFs(M)
 }
 

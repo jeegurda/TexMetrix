@@ -3,21 +3,25 @@ import { Align, Baseline, Metrix } from './types'
 import { dom } from './dom'
 import './style.css'
 import { addEvents } from './events'
-import { getFontString, te } from './utils'
+import { getFonts, getFontString, te } from './utils'
 import { updateDom } from './update-dom'
-import { ffList, fsList, fwList } from './common'
+import { builtinFontData } from './common'
 
 const mlOffset = 30
 const mtOffset = 10
 
 const ctx = dom.canvas.getContext('2d') ?? te('ctx died')
 
+const defFf = 'sans-serif'
+const defFont =
+  getFonts(builtinFontData)[defFf] ?? te('Builtin font family not found')
+
 const M: Metrix = {
   text: 'my honest reaction 😅👌🏽',
   font: {
-    fs: fsList[0],
-    fw: fwList[0],
-    ff: ffList[0],
+    fs: defFont.fs[0],
+    fw: defFont.fw[0],
+    ff: defFf,
     size: 60,
     lh: 80,
     align: Align.START,
