@@ -14,10 +14,11 @@ $ npx serve build/  # 'serve' not included, just as an example
 
 ```bash
 $ npm i
-$ npm run serve  # runs at http://localhost:3000
+$ npm run serve  # runs at http://localhost:8000
 ```
 
 ### todo:
 
 - add safari-supported props
 - is width even needed?
+- use number weights instead of bold/normal

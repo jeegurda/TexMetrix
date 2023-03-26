@@ -51,9 +51,19 @@ body {
   margin: 0;
 }
 
-.fw-fs {
+.font-style {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid:
+    'a b'
+    'c b' / 1fr 1fr;
+}
+
+.fs-browser-container {
+  grid-area: b;
+}
+
+.fs-browser-container label {
+  display: block;
 }
 
 .line-height-input {

@@ -1,9 +1,9 @@
 import { checkTMInterface } from './support'
-import { Align, Baseline, Metrix } from './types'
+import { Align, Baseline, FontStyle, Metrix } from './types'
 import { dom } from './dom'
 import './style.css'
 import { addEvents } from './events'
-import { getFonts, getFontString, te } from './utils'
+import { getFonts, getFontString, te, validateEnumValue } from './utils'
 import { updateDom } from './update-dom'
 import { builtinFontData } from './common'
 
@@ -19,8 +19,9 @@ const defFont =
 const M: Metrix = {
   text: 'my honest reaction 😅👌🏽',
   font: {
-    fs: defFont.fs[0],
-    fw: defFont.fw[0],
+    fs: validateEnumValue(defFont[0].style, FontStyle),
+    fsItalic: false,
+    fsBold: false,
     ff: defFf,
     size: 60,
     lh: 80,
@@ -77,7 +78,12 @@ const drawSync = () => {
   const drawText = (line: string, dx: number, dy: number) => {
     ctx.textAlign = M.font.align
     ctx.textBaseline = M.font.baseline
-    ctx.font = getFontString(M.font.size, M.font.ff, M.font.fw, M.font.fs)
+    ctx.font = getFontString(
+      M.font.size,
+      M.font.ff,
+      M.font.fsBold,
+      M.font.fsItalic,
+    )
     ctx.fillText(line, dx, dy)
   }
 
@@ -168,7 +174,12 @@ const drawSync = () => {
     // measuring line text
     ctx.textAlign = 'center'
     ctx.textBaseline = 'bottom'
-    ctx.font = getFontString(M.font.size / 2, M.font.ff, M.font.fw, M.font.fs)
+    ctx.font = getFontString(
+      M.font.size / 2,
+      M.font.ff,
+      M.font.fsBold,
+      M.font.fsItalic,
+    )
 
     const w = mets.actualBoundingBoxLeft + mets.actualBoundingBoxRight
     const horX = dx - mets.actualBoundingBoxLeft + w / 2

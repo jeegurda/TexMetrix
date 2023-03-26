@@ -1,11 +1,11 @@
 import { dom } from './dom'
-import { Align, Baseline, FontData, FsEnum, FwEnum, Metrix } from './types'
+import { Align, Baseline, FontStyle, FontData, Metrix } from './types'
 import {
   updateCanvasRes,
   updateLocalFonts,
   updateTextInputStyle,
 } from './update-dom'
-import { validateSelectValue } from './utils'
+import { validateEnumValue } from './utils'
 
 const addEvents = (M: Metrix) => {
   dom.textInput.addEventListener('input', () => {
@@ -19,14 +19,20 @@ const addEvents = (M: Metrix) => {
     M.draw()
   })
 
-  dom.fwInput.addEventListener('change', () => {
-    M.font.fw = validateSelectValue(dom.fwInput.value, FwEnum)
+  dom.fsInput.addEventListener('change', () => {
+    M.font.fs = validateEnumValue(dom.fsInput.value, FontStyle)
     updateTextInputStyle(M)
     M.draw()
   })
 
-  dom.fsInput.addEventListener('change', () => {
-    M.font.fs = validateSelectValue(dom.fsInput.value, FsEnum)
+  dom.fsItalicInput.addEventListener('change', () => {
+    M.font.fsItalic = dom.fsItalicInput.checked
+    updateTextInputStyle(M)
+    M.draw()
+  })
+
+  dom.fsBoldInput.addEventListener('change', () => {
+    M.font.fsBold = dom.fsBoldInput.checked
     updateTextInputStyle(M)
     M.draw()
   })
@@ -65,12 +71,12 @@ const addEvents = (M: Metrix) => {
   })
 
   dom.alignInput.addEventListener('change', () => {
-    M.font.align = validateSelectValue(dom.alignInput.value, Align)
+    M.font.align = validateEnumValue(dom.alignInput.value, Align)
     M.draw()
   })
 
   dom.baselineInput.addEventListener('change', () => {
-    M.font.baseline = validateSelectValue<Baseline>(
+    M.font.baseline = validateEnumValue<Baseline>(
       dom.baselineInput.value,
       Baseline,
     )

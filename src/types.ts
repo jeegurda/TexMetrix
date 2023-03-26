@@ -19,16 +19,23 @@ export type LineStyle = {
   display: boolean
 }
 
+export enum FontStyle {
+  REGULAR = 'Regular',
+  BOLD = 'Bold',
+  ITALIC = 'Italic',
+}
+
 export type Metrix = {
   text: string
   font: {
+    ff: string
+    fs: FontStyle
+    fsItalic: boolean
+    fsBold: boolean
     size: number
     lh: number
     align: Align
     baseline: Baseline
-    fw: FwEnum
-    fs: FsEnum
-    ff: string
   }
   props: {
     rw: number
@@ -55,38 +62,27 @@ export type Metrix = {
   init: () => void
 }
 
-export type FDFontStyle = 'Regular' | 'Bold' | 'Italic'
-
 export type FontData = Readonly<{
   family: string
   fullName: string
   postscriptName: string
-  style: FDFontStyle
+  style: string
   blob: () => Promise<Blob>
 }>
 
-export enum FsEnum {
-  NORMAL = 'Normal',
-  ITALIC = 'Italic',
-}
-
-export enum FwEnum {
-  REGULAR = 'Regular',
-  BOLD = 'Bold',
-}
-
 export type BuiltinFontData = Readonly<{
   family: string
-  style: FDFontStyle
+  fullName: string
+  style: string
 }>
 
+export type FontRecord = {
+  style: FontStyle
+  fullName: string
+}
+
 export type FontMap = {
-  [key: string]:
-    | {
-        fs: FsEnum[]
-        fw: FwEnum[]
-      }
-    | undefined
+  [key: string]: FontRecord[] | undefined
 }
 
 declare global {
