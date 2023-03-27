@@ -1,9 +1,9 @@
 import { checkTMInterface } from './support'
-import { Align, Baseline, FontStyle, Metrix } from './types'
+import { Align, Baseline, Metrix } from './types'
 import { dom } from './dom'
 import './style.css'
 import { addEvents } from './events'
-import { getFonts, getFontString, te, validateEnumValue } from './utils'
+import { getFonts, getFontString, te } from './utils'
 import { updateDom } from './update-dom'
 import { builtinFontData } from './common'
 
@@ -12,14 +12,15 @@ const mtOffset = 10
 
 const ctx = dom.canvas.getContext('2d') ?? te('ctx died')
 
+const fm = getFonts(builtinFontData)
+
 const defFf = 'sans-serif'
-const defFont =
-  getFonts(builtinFontData)[defFf] ?? te('Builtin font family not found')
+const defFont = fm[defFf] ?? te('Default font family not found')
 
 const M: Metrix = {
   text: 'my honest reaction 😅👌🏽',
   font: {
-    fs: validateEnumValue(defFont[0].style, FontStyle),
+    fs: defFont[0].postscriptName,
     fsItalic: false,
     fsBold: false,
     ff: defFf,
@@ -43,6 +44,7 @@ const M: Metrix = {
     shared: {
       cw: 0,
       ch: 0,
+      fm,
     },
   },
   draw: () => {},
@@ -80,7 +82,7 @@ const drawSync = () => {
     ctx.textBaseline = M.font.baseline
     ctx.font = getFontString(
       M.font.size,
-      M.font.ff,
+      M.font.fs,
       M.font.fsBold,
       M.font.fsItalic,
     )
@@ -117,6 +119,7 @@ const drawSync = () => {
 
     ctx.strokeStyle = M.props.style.fontBb.color
     ctx.lineWidth = M.props.style.fontBb.width
+    // ctx.setLineDash([6 / M.props.scaleMp, 3 / M.props.scaleMp])
     ctx.stroke(fPath)
   }
 
@@ -176,7 +179,7 @@ const drawSync = () => {
     ctx.textBaseline = 'bottom'
     ctx.font = getFontString(
       M.font.size / 2,
-      M.font.ff,
+      M.font.fs,
       M.font.fsBold,
       M.font.fsItalic,
     )

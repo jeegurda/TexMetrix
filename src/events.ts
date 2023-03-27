@@ -1,11 +1,13 @@
+import { builtinFontData } from './common'
 import { dom } from './dom'
-import { Align, Baseline, FontStyle, FontData, Metrix } from './types'
+import { Align, Baseline, FontData, Metrix } from './types'
 import {
   updateCanvasRes,
-  updateLocalFonts,
+  updateFf,
+  updateFs,
   updateTextInputStyle,
 } from './update-dom'
-import { validateEnumValue } from './utils'
+import { getFonts, validateEnumValue } from './utils'
 
 const addEvents = (M: Metrix) => {
   dom.textInput.addEventListener('input', () => {
@@ -15,12 +17,13 @@ const addEvents = (M: Metrix) => {
 
   dom.ffInput.addEventListener('change', () => {
     M.font.ff = dom.ffInput.value
+    updateFs(M, true)
     updateTextInputStyle(M)
     M.draw()
   })
 
   dom.fsInput.addEventListener('change', () => {
-    M.font.fs = validateEnumValue(dom.fsInput.value, FontStyle)
+    M.font.fs = dom.fsInput.value
     updateTextInputStyle(M)
     M.draw()
   })
@@ -37,7 +40,13 @@ const addEvents = (M: Metrix) => {
     M.draw()
   })
 
-  dom.localFontsButton.addEventListener('click', async () => {
+  dom.localFontsButton.addEventListener('click', () => {
+    const updateLocalFonts = (fd: FontData[]) => {
+      M.props.shared.fm = getFonts(builtinFontData.concat(fd))
+      updateFf(M)
+      updateFs(M)
+    }
+
     if (window.queryLocalFonts) {
       window
         .queryLocalFonts()
@@ -47,7 +56,7 @@ const addEvents = (M: Metrix) => {
               'Empty array, permission denied. Enable manually in browser',
             )
           } else {
-            updateLocalFonts(M, data)
+            updateLocalFonts(data)
           }
         })
         .catch((reason: Error) => {
@@ -112,15 +121,11 @@ const addEvents = (M: Metrix) => {
     if (ev.ctrlKey) {
       scaleLin += -ev.deltaY / 100
 
-      let scaleD = M.props.scaleMp
-
       const scaleExp = Math.pow(1.4, scaleLin)
 
       M.props.scaleMp = scaleExp
 
       dom.zoomValue.innerHTML = M.props.scaleMp.toFixed(2)
-
-      scaleD -= M.props.scaleMp
 
       const xBefore = M.props.rw * (ev.offsetX / M.props.shared.cw)
       const yBefore = M.props.rh * (ev.offsetY / M.props.shared.ch)

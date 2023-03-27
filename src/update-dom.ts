@@ -1,7 +1,22 @@
-import { builtinFontData, localFontData } from './common'
+import { builtinFontData } from './common'
 import { dom } from './dom'
-import { BuiltinFontData, FontData, FontMap, FontRecord, Metrix } from './types'
+import { FontRecord, Metrix } from './types'
 import { getFonts, te } from './utils'
+
+const getOptsFromArr = (arr: FontRecord[] | string[]): HTMLOptionElement[] => {
+  return arr.map((item) => {
+    const opt = document.createElement('option')
+    if (typeof item === 'string') {
+      opt.value = item
+      opt.innerHTML = item
+    } else {
+      opt.value = item.postscriptName
+      opt.innerHTML = item.style
+      opt.title = item.fullName
+    }
+    return opt
+  })
+}
 
 const updateCanvasRes = (M: Metrix) => {
   dom.canvasSizeValue.innerHTML =
@@ -13,51 +28,47 @@ const updateCanvasRes = (M: Metrix) => {
 }
 
 const updateTextInputStyle = (M: Metrix) => {
-  dom.textInput.style.fontFamily = M.font.ff
+  dom.textInput.style.fontFamily = M.font.fs
   dom.textInput.style.fontStyle = M.font.fsItalic ? 'italic' : 'normal'
   dom.textInput.style.fontWeight = M.font.fsBold ? 'bold' : 'normal'
 }
 
-const updateFfFwFs = (M: Metrix) => {
-  const getOptsFromArr = (
-    arr: FontRecord[] | string[],
-  ): HTMLOptionElement[] => {
-    return arr.map((item) => {
-      const opt = document.createElement('option')
-      if (typeof item === 'string') {
-        opt.value = item
-        opt.innerHTML = item
-      } else {
-        opt.value = item.fullName
-        opt.innerHTML = item.style
-      }
-      return opt
-    })
-  }
-
-  const mergedFm = {
-    ...getFonts(builtinFontData),
-    ...getFonts(localFontData),
-  }
-
+const updateFf = (M: Metrix) => {
   dom.ffInput.innerHTML = ''
-  dom.ffInput.append(...getOptsFromArr(Object.keys(mergedFm)))
+  dom.ffInput.append(...getOptsFromArr(Object.keys(M.props.shared.fm)))
   dom.ffInput.value = M.font.ff
+}
 
+const updateFs = (M: Metrix, reset: boolean = false) => {
   const record =
-    mergedFm[M.font.ff] ?? te('Selected font-family is not in array')
+    M.props.shared.fm[M.font.ff] ?? te('Selected font-family is not in fontmap')
 
   dom.fsInput.innerHTML = ''
   dom.fsInput.append(...getOptsFromArr(record))
 
-  dom.fsBoldInput.checked = M.font.fsBold
-  dom.fsItalicInput.checked = M.font.fsItalic
+  if (reset) {
+    M.font.fs = record[0].postscriptName
+  }
+
+  const availableValues = record.map(({ postscriptName }) => postscriptName)
+  if (!availableValues.includes(M.font.fs)) {
+    console.warn(
+      '%o is not in available styles list. Who tf set that?',
+      M.font.fs,
+    )
+  }
+
+  dom.fsInput.value = M.font.fs
 }
 
 const updateDom = (M: Metrix) => {
   dom.textInput.value = M.text
   updateTextInputStyle(M)
-  updateFfFwFs(M)
+  updateFf(M)
+  updateFs(M)
+  dom.fsBoldInput.checked = M.font.fsBold
+  dom.fsItalicInput.checked = M.font.fsItalic
+
   dom.fontSizeInput.value = String(M.font.size)
   dom.fontSizeValue.innerHTML = String(M.font.size)
   dom.lhInput.value = String(M.font.lh)
@@ -82,9 +93,4 @@ const updateDom = (M: Metrix) => {
   dom.lineStyle.actualBb.display.checked = M.props.style.actualBb.display
 }
 
-const updateLocalFonts = (M: Metrix, data: FontData[]) => {
-  localFontData.splice(0, localFontData.length, ...data)
-  updateFfFwFs(M)
-}
-
-export { updateDom, updateCanvasRes, updateTextInputStyle, updateLocalFonts }
+export { updateDom, updateCanvasRes, updateTextInputStyle, updateFf, updateFs }

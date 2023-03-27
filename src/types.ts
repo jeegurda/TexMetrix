@@ -19,17 +19,11 @@ export type LineStyle = {
   display: boolean
 }
 
-export enum FontStyle {
-  REGULAR = 'Regular',
-  BOLD = 'Bold',
-  ITALIC = 'Italic',
-}
-
 export type Metrix = {
   text: string
   font: {
     ff: string
-    fs: FontStyle
+    fs: string
     fsItalic: boolean
     fsBold: boolean
     size: number
@@ -56,6 +50,7 @@ export type Metrix = {
     shared: {
       cw: number
       ch: number
+      fm: FontMap
     }
   }
   draw: () => void
@@ -70,15 +65,15 @@ export type FontData = Readonly<{
   blob: () => Promise<Blob>
 }>
 
-export type BuiltinFontData = Readonly<{
-  family: string
-  fullName: string
-  style: string
-}>
+export type BuiltinFontData = Pick<
+  FontData,
+  'family' | 'fullName' | 'postscriptName' | 'style'
+>
 
 export type FontRecord = {
-  style: FontStyle
   fullName: string
+  postscriptName: string
+  style: string
 }
 
 export type FontMap = {

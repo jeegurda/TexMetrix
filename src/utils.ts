@@ -1,4 +1,4 @@
-import { Align, Baseline, BuiltinFontData, FontMap, FontStyle } from './types'
+import { Align, Baseline, BuiltinFontData, FontMap } from './types'
 
 const debounce = (fn: (...args: unknown[]) => unknown, delay: number) => {
   let t: null | number = null
@@ -14,7 +14,7 @@ const debounce = (fn: (...args: unknown[]) => unknown, delay: number) => {
 
 const validateEnumValue = <T>(
   value: string,
-  enumObj: typeof Align | typeof Baseline | typeof FontStyle,
+  enumObj: typeof Align | typeof Baseline,
 ): T => {
   const values: string[] = Object.values(enumObj)
 
@@ -49,16 +49,16 @@ const getFontString = (
 }
 
 const getFonts = (fd: readonly BuiltinFontData[]) => {
-  const fontMap: FontMap = fd.reduce((acc: FontMap, c) => {
-    let record = acc[c.family] || (acc[c.family] = [])
+  const fontMap: FontMap = fd.reduce(
+    (acc: FontMap, { family, fullName, style, postscriptName }) => {
+      let record = acc[family] || (acc[family] = [])
 
-    record.push({
-      fullName: c.fullName,
-      style: validateEnumValue(c.style, FontStyle),
-    })
+      record.push({ fullName, style, postscriptName })
 
-    return acc
-  }, {})
+      return acc
+    },
+    {},
+  )
 
   const validateFontMap = (fm: FontMap) => {
     Object.entries(fm).forEach(([k, v]) => {
