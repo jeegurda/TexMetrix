@@ -20,3 +20,6 @@ export const builtinFontData: readonly BuiltinFontData[] = [
     style: '(browser)',
   },
 ] as const
+
+export const mlOffset = 30
+export const mtOffset = 10

@@ -1,6 +1,7 @@
 import { builtinFontData } from './common'
 import { dom } from './dom'
-import { Align, Baseline, FontData, Metrix } from './types'
+import { draw, init } from './draw'
+import { Align, Baseline, FontData, IMetrix } from './types'
 import {
   updateCanvasRes,
   updateFf,
@@ -9,42 +10,42 @@ import {
 } from './update-dom'
 import { getFonts, validateEnumValue } from './utils'
 
-const addEvents = (M: Metrix) => {
+const addEvents = (m: IMetrix) => {
   dom.textInput.addEventListener('input', () => {
-    M.text = dom.textInput.value
-    M.draw()
+    m.text = dom.textInput.value
+    draw(m)
   })
 
   dom.ffInput.addEventListener('change', () => {
-    M.font.ff = dom.ffInput.value
-    updateFs(M, true)
-    updateTextInputStyle(M)
-    M.draw()
+    m.font.ff = dom.ffInput.value
+    updateFs(m, true)
+    updateTextInputStyle(m)
+    draw(m)
   })
 
   dom.fsInput.addEventListener('change', () => {
-    M.font.fs = dom.fsInput.value
-    updateTextInputStyle(M)
-    M.draw()
+    m.font.fs = dom.fsInput.value
+    updateTextInputStyle(m)
+    draw(m)
   })
 
   dom.fsItalicInput.addEventListener('change', () => {
-    M.font.fsItalic = dom.fsItalicInput.checked
-    updateTextInputStyle(M)
-    M.draw()
+    m.font.fsItalic = dom.fsItalicInput.checked
+    updateTextInputStyle(m)
+    draw(m)
   })
 
   dom.fsBoldInput.addEventListener('change', () => {
-    M.font.fsBold = dom.fsBoldInput.checked
-    updateTextInputStyle(M)
-    M.draw()
+    m.font.fsBold = dom.fsBoldInput.checked
+    updateTextInputStyle(m)
+    draw(m)
   })
 
   dom.localFontsButton.addEventListener('click', () => {
     const updateLocalFonts = (fd: FontData[]) => {
-      M.props.shared.fm = getFonts(builtinFontData.concat(fd))
-      updateFf(M)
-      updateFs(M)
+      m.props.shared.fm = getFonts(builtinFontData.concat(fd))
+      updateFf(m)
+      updateFs(m)
     }
 
     if (window.queryLocalFonts) {
@@ -68,46 +69,46 @@ const addEvents = (M: Metrix) => {
   })
 
   dom.fontSizeInput.addEventListener('input', () => {
-    M.font.size = Number(dom.fontSizeInput.value)
+    m.font.size = Number(dom.fontSizeInput.value)
     dom.fontSizeValue.innerHTML = dom.fontSizeInput.value
-    M.draw()
+    draw(m)
   })
 
   dom.lhInput.addEventListener('input', () => {
-    M.font.lh = Number(dom.lhInput.value)
+    m.font.lh = Number(dom.lhInput.value)
     dom.lhValue.innerHTML = dom.lhInput.value
-    M.draw()
+    draw(m)
   })
 
   dom.alignInput.addEventListener('change', () => {
-    M.font.align = validateEnumValue(dom.alignInput.value, Align)
-    M.draw()
+    m.font.align = validateEnumValue(dom.alignInput.value, Align)
+    draw(m)
   })
 
   dom.baselineInput.addEventListener('change', () => {
-    M.font.baseline = validateEnumValue<Baseline>(
+    m.font.baseline = validateEnumValue<Baseline>(
       dom.baselineInput.value,
       Baseline,
     )
-    M.draw()
+    draw(m)
   })
 
   dom.rrInput.addEventListener('input', () => {
     const value = dom.rrInput.value
 
     dom.rrValue.innerHTML = value
-    M.props.rr = Number(value)
-    M.init() // rescaling required
-    updateCanvasRes(M)
+    m.props.rr = Number(value)
+    init(m) // rescaling required
+    updateCanvasRes(m)
 
-    M.draw()
+    draw(m)
   })
 
   window.addEventListener('resize', () => {
-    M.init()
-    updateCanvasRes(M)
+    init(m)
+    updateCanvasRes(m)
 
-    M.draw()
+    draw(m)
   })
 
   dom.canvasUi.addEventListener('contextmenu', (ev) => {
@@ -123,28 +124,28 @@ const addEvents = (M: Metrix) => {
 
       const scaleExp = Math.pow(1.4, scaleLin)
 
-      M.props.scaleMp = scaleExp
+      m.props.scaleMp = scaleExp
 
-      dom.zoomValue.innerHTML = M.props.scaleMp.toFixed(2)
+      dom.zoomValue.innerHTML = m.props.scaleMp.toFixed(2)
 
-      const xBefore = M.props.rw * (ev.offsetX / M.props.shared.cw)
-      const yBefore = M.props.rh * (ev.offsetY / M.props.shared.ch)
+      const xBefore = m.props.rw * (ev.offsetX / m.props.shared.cw)
+      const yBefore = m.props.rh * (ev.offsetY / m.props.shared.ch)
 
-      M.init()
+      init(m)
 
-      const xAfter = M.props.rw * (ev.offsetX / M.props.shared.cw)
-      const yAfter = M.props.rh * (ev.offsetY / M.props.shared.ch)
+      const xAfter = m.props.rw * (ev.offsetX / m.props.shared.cw)
+      const yAfter = m.props.rh * (ev.offsetY / m.props.shared.ch)
 
-      M.props.drawX += xAfter - xBefore
-      M.props.drawY += yAfter - yBefore
+      m.props.drawX += xAfter - xBefore
+      m.props.drawY += yAfter - yBefore
     } else {
-      const dx = ev.deltaX / M.props.scaleMp
-      const dy = ev.deltaY / M.props.scaleMp
+      const dx = ev.deltaX / m.props.scaleMp
+      const dy = ev.deltaY / m.props.scaleMp
 
-      M.props.drawX -= dx
-      M.props.drawY -= dy
+      m.props.drawX -= dx
+      m.props.drawY -= dy
     }
-    M.draw()
+    draw(m)
   })
 
   dom.canvasUi.addEventListener('mousedown', (ev) => {
@@ -153,14 +154,14 @@ const addEvents = (M: Metrix) => {
 
     let downX = ev.clientX
     let downY = ev.clientY
-    let origDrawX = M.props.drawX
-    let origDrawY = M.props.drawY
+    let origDrawX = m.props.drawX
+    let origDrawY = m.props.drawY
 
     const handleMove = (ev: MouseEvent) => {
       ev.preventDefault()
-      M.props.drawX = origDrawX + (ev.clientX - downX) / M.props.scaleMp
-      M.props.drawY = origDrawY + (ev.clientY - downY) / M.props.scaleMp
-      M.draw()
+      m.props.drawX = origDrawX + (ev.clientX - downX) / m.props.scaleMp
+      m.props.drawY = origDrawY + (ev.clientY - downY) / m.props.scaleMp
+      draw(m)
     }
 
     const handleUp = () => {
@@ -177,16 +178,16 @@ const addEvents = (M: Metrix) => {
 
   styleProps.forEach((prop) => {
     dom.lineStyle[prop].color.addEventListener('input', () => {
-      M.props.style[prop].color = dom.lineStyle[prop].color.value
-      M.draw()
+      m.props.style[prop].color = dom.lineStyle[prop].color.value
+      draw(m)
     })
     dom.lineStyle[prop].width.addEventListener('input', () => {
-      M.props.style[prop].width = Number(dom.lineStyle[prop].width.value)
-      M.draw()
+      m.props.style[prop].width = Number(dom.lineStyle[prop].width.value)
+      draw(m)
     })
     dom.lineStyle[prop].display.addEventListener('input', () => {
-      M.props.style[prop].display = dom.lineStyle[prop].display.checked
-      M.draw()
+      m.props.style[prop].display = dom.lineStyle[prop].display.checked
+      draw(m)
     })
   })
 }

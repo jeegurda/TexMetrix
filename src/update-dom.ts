@@ -1,9 +1,9 @@
 import { builtinFontData } from './common'
 import { dom } from './dom'
-import { FontRecord, Metrix } from './types'
+import { IFont, IMetrix } from './types'
 import { getFonts, te } from './utils'
 
-const getOptsFromArr = (arr: FontRecord[] | string[]): HTMLOptionElement[] => {
+const getOptsFromArr = (arr: IFont[] | string[]): HTMLOptionElement[] => {
   return arr.map((item) => {
     const opt = document.createElement('option')
     if (typeof item === 'string') {
@@ -18,50 +18,50 @@ const getOptsFromArr = (arr: FontRecord[] | string[]): HTMLOptionElement[] => {
   })
 }
 
-const updateCanvasRes = (M: Metrix) => {
+const updateCanvasRes = (m: IMetrix) => {
   dom.canvasSizeValue.innerHTML =
-    M.props.rw.toFixed(1) + 'x' + M.props.rh.toFixed(1)
+    m.props.rw.toFixed(1) + 'x' + m.props.rh.toFixed(1)
   dom.renderPixelValue.innerHTML =
-    (M.props.rw * M.props.rr).toFixed(1) +
+    (m.props.rw * m.props.rr).toFixed(1) +
     'x' +
-    (M.props.rh * M.props.rr).toFixed(1)
+    (m.props.rh * m.props.rr).toFixed(1)
 }
 
-const updateTextInputStyle = (M: Metrix) => {
-  dom.textInput.style.fontFamily = M.font.fs
-  dom.textInput.style.fontStyle = M.font.fsItalic ? 'italic' : 'normal'
-  dom.textInput.style.fontWeight = M.font.fsBold ? 'bold' : 'normal'
+const updateTextInputStyle = (m: IMetrix) => {
+  dom.textInput.style.fontFamily = m.font.fs
+  dom.textInput.style.fontStyle = m.font.fsItalic ? 'italic' : 'normal'
+  dom.textInput.style.fontWeight = m.font.fsBold ? 'bold' : 'normal'
 }
 
-const updateFf = (M: Metrix) => {
+const updateFf = (m: IMetrix) => {
   dom.ffInput.innerHTML = ''
-  dom.ffInput.append(...getOptsFromArr(Object.keys(M.props.shared.fm)))
-  dom.ffInput.value = M.font.ff
+  dom.ffInput.append(...getOptsFromArr(Object.keys(m.props.shared.fm)))
+  dom.ffInput.value = m.font.ff
 }
 
-const updateFs = (M: Metrix, reset: boolean = false) => {
+const updateFs = (m: IMetrix, reset: boolean = false) => {
   const record =
-    M.props.shared.fm[M.font.ff] ?? te('Selected font-family is not in fontmap')
+    m.props.shared.fm[m.font.ff] ?? te('Selected font-family is not in fontmap')
 
   dom.fsInput.innerHTML = ''
   dom.fsInput.append(...getOptsFromArr(record))
 
   if (reset) {
-    M.font.fs = record[0].postscriptName
+    m.font.fs = record[0].postscriptName
   }
 
   const availableValues = record.map(({ postscriptName }) => postscriptName)
-  if (!availableValues.includes(M.font.fs)) {
+  if (!availableValues.includes(m.font.fs)) {
     console.warn(
       '%o is not in available styles list. Who tf set that?',
-      M.font.fs,
+      m.font.fs,
     )
   }
 
-  dom.fsInput.value = M.font.fs
+  dom.fsInput.value = m.font.fs
 }
 
-const updateDom = (M: Metrix) => {
+const updateDom = (M: IMetrix) => {
   dom.textInput.value = M.text
   updateTextInputStyle(M)
   updateFf(M)

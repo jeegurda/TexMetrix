@@ -13,13 +13,13 @@ export enum Baseline {
   TOP = 'top',
 }
 
-export type LineStyle = {
+export interface ILineStyle {
   width: number
   color: string
   display: boolean
 }
 
-export type Metrix = {
+export interface IMetrix {
   text: string
   font: {
     ff: string
@@ -42,42 +42,43 @@ export type Metrix = {
 
     rr: number
     style: {
-      actualBb: LineStyle
-      fontBb: LineStyle
-      blAlign: LineStyle
+      actualBb: ILineStyle
+      fontBb: ILineStyle
+      blAlign: ILineStyle
     }
 
     shared: {
       cw: number
       ch: number
       fm: FontMap
+      ctx: CanvasRenderingContext2D
     }
   }
-  draw: () => void
-  init: () => void
 }
 
-export type FontData = Readonly<{
+interface IFontData {
   family: string
   fullName: string
   postscriptName: string
   style: string
   blob: () => Promise<Blob>
-}>
+}
+
+export type FontData = Readonly<IFontData>
 
 export type BuiltinFontData = Pick<
   FontData,
   'family' | 'fullName' | 'postscriptName' | 'style'
 >
 
-export type FontRecord = {
+export interface IFont {
   fullName: string
   postscriptName: string
   style: string
 }
 
 export type FontMap = {
-  [key: string]: FontRecord[] | undefined
+  [key: string]: IFont[] | undefined
 }
 
 declare global {
