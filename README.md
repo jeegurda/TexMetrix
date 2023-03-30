@@ -20,5 +20,4 @@ $ npm run serve  # runs at http://localhost:8000
 ### todo:
 
 - add safari-supported props
-- is width even needed?
 - use number weights instead of bold/normal

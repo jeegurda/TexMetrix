@@ -154,9 +154,20 @@ const drawSync = (m: IMetrix) => {
     const h = mets.actualBoundingBoxAscent + mets.actualBoundingBoxDescent
     const verX = verMLx + totalMtOffset
     const verY = dy - mets.actualBoundingBoxAscent + h / 2
+    ctx.save() // save before transform
     ctx.translate(verX, verY)
     ctx.rotate(90 / (180 / Math.PI))
     ctx.fillText(`${h.toFixed(1)}px`, 0, 0)
+    ctx.restore() // restore transform
+
+    ctx.textAlign = 'end'
+    ctx.fillText(
+      `(${mets.width.toFixed(1)}px/${
+        mets.fontBoundingBoxAscent + mets.fontBoundingBoxDescent
+      }px)`,
+      dx - totalMtOffset,
+      dy,
+    )
     ctx.restore() // restore rest
 
     // top point of text above hor line
