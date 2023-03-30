@@ -26,7 +26,8 @@ const drawSync = (m: IMetrix) => {
     shared: { ctx },
   } = m.props
 
-  const drawText = (line: string, dx: number, dy: number) => {
+  const drawText = (line: string, dx: number, dy: number): TextMetrics => {
+    ctx.save()
     ctx.textAlign = m.font.align
     ctx.textBaseline = m.font.baseline
     ctx.font = getFontString(
@@ -36,6 +37,10 @@ const drawSync = (m: IMetrix) => {
       m.font.fsItalic,
     )
     ctx.fillText(line, dx, dy)
+    const mets = ctx.measureText(line)
+    ctx.restore()
+
+    return mets
   }
 
   const drawBlAlign = (idx: number, dx: number, dy: number) => {
@@ -49,9 +54,11 @@ const drawSync = (m: IMetrix) => {
       blAlignPath.lineTo(dx, rh)
     }
 
+    ctx.save()
     ctx.strokeStyle = m.props.style.blAlign.color
     ctx.lineWidth = m.props.style.blAlign.width
     ctx.stroke(blAlignPath)
+    ctx.restore()
   }
 
   const drawFontBb = (
@@ -66,10 +73,12 @@ const drawSync = (m: IMetrix) => {
     fPath.moveTo(0, dy + mets.fontBoundingBoxDescent)
     fPath.lineTo(rw, dy + mets.fontBoundingBoxDescent)
 
+    ctx.save()
     ctx.strokeStyle = m.props.style.fontBb.color
     ctx.lineWidth = m.props.style.fontBb.width
     // ctx.setLineDash([6 / M.props.scaleMp, 3 / M.props.scaleMp])
     ctx.stroke(fPath)
+    ctx.restore()
   }
 
   const drawActualBb = (
@@ -94,9 +103,11 @@ const drawSync = (m: IMetrix) => {
     aPath.moveTo(dx + mets.actualBoundingBoxRight, 0)
     aPath.lineTo(dx + mets.actualBoundingBoxRight, rh)
 
+    ctx.save()
     ctx.strokeStyle = m.props.style.actualBb.color
     ctx.lineWidth = m.props.style.actualBb.width
     ctx.stroke(aPath)
+    ctx.restore()
   }
 
   let lastMLYTop = 0
@@ -117,11 +128,13 @@ const drawSync = (m: IMetrix) => {
     p.moveTo(verMLx, dy - mets.actualBoundingBoxAscent)
     p.lineTo(verMLx, dy + mets.actualBoundingBoxDescent)
 
-    ctx.globalAlpha = 0.5
+    ctx.save()
     ctx.strokeStyle = m.props.style.actualBb.color
     ctx.lineWidth = m.props.style.actualBb.width
+    ctx.save() // save before alpha
+    ctx.globalAlpha = 0.5
     ctx.stroke(p)
-    ctx.globalAlpha = 1
+    ctx.restore() // restore alpha
 
     // measuring line text
     ctx.textAlign = 'center'
@@ -144,8 +157,7 @@ const drawSync = (m: IMetrix) => {
     ctx.translate(verX, verY)
     ctx.rotate(90 / (180 / Math.PI))
     ctx.fillText(`${h.toFixed(1)}px`, 0, 0)
-    ctx.rotate(-90 / (180 / Math.PI))
-    ctx.translate(-verX, -verY)
+    ctx.restore() // restore rest
 
     // top point of text above hor line
     lastMLYTop = horY - m.font.size / 2
@@ -159,14 +171,14 @@ const drawSync = (m: IMetrix) => {
     const dx = m.props.drawX
     const dy = m.props.drawY + m.font.lh * idx
 
-    drawText(line, dx, dy)
+    const mets = drawText(line, dx, dy)
 
+    ctx.save()
     ctx.globalAlpha = 0.5
-    const mets = ctx.measureText(line)
     m.props.style.blAlign.display && drawBlAlign(idx, dx, dy)
     m.props.style.fontBb.display && drawFontBb(idx, mets, dx, dy)
     m.props.style.actualBb.display && drawActualBb(idx, mets, dx, dy)
-    ctx.globalAlpha = 1
+    ctx.restore() // restore alpha
 
     m.props.style.actualBb.display && drawMl(idx, mets, dx, dy)
   })
@@ -177,6 +189,7 @@ let af: number | null = null
 const draw = (...args: Parameters<typeof drawSync>) => {
   typeof af === 'number' && cancelAnimationFrame(af)
   af = requestAnimationFrame(drawSync.bind(null, ...args))
+  // drawSync.call(null, ...args)
 }
 
 export { draw, init }

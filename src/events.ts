@@ -111,6 +111,23 @@ const addEvents = (m: IMetrix) => {
     draw(m)
   })
 
+  const styleProps = ['blAlign', 'fontBb', 'actualBb'] as const
+
+  styleProps.forEach((prop) => {
+    dom.lineStyle[prop].color.addEventListener('input', () => {
+      m.props.style[prop].color = dom.lineStyle[prop].color.value
+      draw(m)
+    })
+    dom.lineStyle[prop].width.addEventListener('input', () => {
+      m.props.style[prop].width = Number(dom.lineStyle[prop].width.value)
+      draw(m)
+    })
+    dom.lineStyle[prop].display.addEventListener('input', () => {
+      m.props.style[prop].display = dom.lineStyle[prop].display.checked
+      draw(m)
+    })
+  })
+
   dom.canvasUi.addEventListener('contextmenu', (ev) => {
     ev.preventDefault()
   })
@@ -148,47 +165,56 @@ const addEvents = (m: IMetrix) => {
     draw(m)
   })
 
+  let eventsAdded = false
+  let downX: number
+  let downY: number
+  let origDrawX: number
+  let origDrawY: number
+
+  const handleUp = () => {
+    dom.canvasUi.classList.remove('grabbing')
+    removeMoveEvents()
+  }
+
+  const handleMove = (evt: MouseEvent) => {
+    if (evt.buttons === 0) {
+      // ok to happen once on button release, otherwise user input sequence was somehow broken
+      // therefore remove events manually
+      handleUp()
+      return
+    }
+    evt.preventDefault()
+    m.props.drawX = origDrawX + (evt.clientX - downX) / m.props.scaleMp
+    m.props.drawY = origDrawY + (evt.clientY - downY) / m.props.scaleMp
+    draw(m)
+  }
+
+  const addMoveEvents = () => {
+    if (eventsAdded) {
+      console.warn('Events already exist')
+      return
+    }
+    window.addEventListener('mousemove', handleMove)
+    window.addEventListener('mouseup', handleUp)
+    eventsAdded = true
+  }
+
+  const removeMoveEvents = () => {
+    window.removeEventListener('mousemove', handleMove)
+    window.removeEventListener('mouseup', handleUp)
+    eventsAdded = false
+  }
+
   dom.canvasUi.addEventListener('mousedown', (ev) => {
     ev.preventDefault()
     dom.canvasUi.classList.add('grabbing')
 
-    let downX = ev.clientX
-    let downY = ev.clientY
-    let origDrawX = m.props.drawX
-    let origDrawY = m.props.drawY
+    downX = ev.clientX
+    downY = ev.clientY
+    origDrawX = m.props.drawX
+    origDrawY = m.props.drawY
 
-    const handleMove = (ev: MouseEvent) => {
-      ev.preventDefault()
-      m.props.drawX = origDrawX + (ev.clientX - downX) / m.props.scaleMp
-      m.props.drawY = origDrawY + (ev.clientY - downY) / m.props.scaleMp
-      draw(m)
-    }
-
-    const handleUp = () => {
-      dom.canvasUi.classList.remove('grabbing')
-      window.removeEventListener('mousemove', handleMove)
-      window.removeEventListener('mouseup', handleUp)
-    }
-
-    window.addEventListener('mousemove', handleMove)
-    window.addEventListener('mouseup', handleUp)
-  })
-
-  const styleProps = ['blAlign', 'fontBb', 'actualBb'] as const
-
-  styleProps.forEach((prop) => {
-    dom.lineStyle[prop].color.addEventListener('input', () => {
-      m.props.style[prop].color = dom.lineStyle[prop].color.value
-      draw(m)
-    })
-    dom.lineStyle[prop].width.addEventListener('input', () => {
-      m.props.style[prop].width = Number(dom.lineStyle[prop].width.value)
-      draw(m)
-    })
-    dom.lineStyle[prop].display.addEventListener('input', () => {
-      m.props.style[prop].display = dom.lineStyle[prop].display.checked
-      draw(m)
-    })
+    addMoveEvents()
   })
 }
 
