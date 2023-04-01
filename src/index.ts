@@ -1,7 +1,6 @@
 import { checkTMInterface } from './support'
 import { Align, Baseline, IMetrix } from './types'
 import { dom } from './dom'
-import './style.css'
 import { addEvents } from './events'
 import { getFonts, te } from './utils'
 import { updateDom } from './update-dom'

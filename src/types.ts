@@ -1,3 +1,7 @@
+declare global {
+  var queryLocalFonts: (() => Promise<FontData[]>) | undefined
+}
+
 export enum Align {
   START = 'start',
   CENTER = 'center',
@@ -79,8 +83,4 @@ export interface IFont {
 
 export type FontMap = {
   [key: string]: IFont[] | undefined
-}
-
-declare global {
-  var queryLocalFonts: (() => Promise<FontData[]>) | undefined
 }
