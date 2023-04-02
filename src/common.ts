@@ -1,4 +1,4 @@
-import { BuiltinFontData, FontData } from './types'
+import { BuiltinFontData } from './types'
 
 export const builtinFontData: readonly BuiltinFontData[] = [
   {

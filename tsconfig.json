@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "strict": true,
-    "target": "ES2022",
-    "noEmit": true
-  }
+    "noEmit": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "target": "ES2022"
+  },
+  "include": ["./src"]
 }
