@@ -7,7 +7,7 @@
     "build": "esbuild src/index.ts --bundle --outfile=public/bundled/bundle.js --sourcemap=linked --minify",
     "serve": "esbuild src/index.ts --bundle --outfile=public/bundled/bundle.js --sourcemap=linked --serve --servedir=public"
   },
-  "author": "",
+  "author": "jeegurda",
   "license": "ISC",
   "dependencies": {
     "esbuild": "0.17.8",

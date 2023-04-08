@@ -22,3 +22,4 @@ $ npm run serve  # runs at http://localhost:8000
 - add safari-supported props
 - use number weights instead of bold/normal
 - option to use ff only without postscript name
+- add pointer events on touch

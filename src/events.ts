@@ -136,6 +136,8 @@ const addEvents = (m: IMetrix) => {
 
   dom.canvasUi.addEventListener('wheel', (ev) => {
     ev.preventDefault()
+
+    // auto-set when pinching on os x
     if (ev.ctrlKey) {
       scaleLin += -ev.deltaY / 100
 
