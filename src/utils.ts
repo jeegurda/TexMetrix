@@ -14,9 +14,11 @@ const debounce = (fn: (...args: unknown[]) => unknown, delay: number) => {
 
 const validateEnumValue = <T>(
   value: string,
-  enumObj: typeof Align | typeof Baseline,
+  enumObj: {
+    [k: string]: T | string
+  },
 ): T => {
-  const values: string[] = Object.values(enumObj)
+  const values = Object.values(enumObj)
 
   if (values.includes(value)) {
     return value as T
