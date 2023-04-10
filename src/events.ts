@@ -81,7 +81,7 @@ const addEvents = (m: IMetrix) => {
   })
 
   dom.alignInput.addEventListener('change', () => {
-    m.font.align = validateEnumValue<Align>(dom.alignInput.value, Baseline)
+    m.font.align = validateEnumValue<Align>(dom.alignInput.value, Align)
     draw(m)
   })
 
