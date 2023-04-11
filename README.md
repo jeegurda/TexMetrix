@@ -20,5 +20,4 @@ $ npm run serve  # runs at http://localhost:8000
 ### todo:
 
 - add safari-supported props
-- option to use ff only without postscript name
 - add pointer events on touch
