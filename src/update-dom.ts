@@ -1,7 +1,6 @@
-import { builtinFontData } from './common'
 import { dom } from './dom'
 import { IFont, IMetrix } from './types'
-import { getFonts, te } from './utils'
+import { te } from './utils'
 
 const getOptsFromArr = (arr: IFont[] | string[]): HTMLOptionElement[] => {
   return arr.map((item) => {
@@ -28,9 +27,9 @@ const updateCanvasRes = (m: IMetrix) => {
 }
 
 const updateTextInputStyle = (m: IMetrix) => {
-  dom.textInput.style.fontFamily = m.font.fs
-  dom.textInput.style.fontStyle = m.font.fsItalic ? 'italic' : 'normal'
-  dom.textInput.style.fontWeight = m.font.fw
+  dom.textInput.style.fontFamily = m.font.useFs ? m.font.fs : m.font.ff
+  dom.textInput.style.fontStyle = m.font.useItalic ? 'italic' : 'normal'
+  dom.textInput.style.fontWeight = m.font.useWeight ? m.font.fw : ''
 }
 
 const updateFf = (m: IMetrix) => {
@@ -66,8 +65,12 @@ const updateDom = (M: IMetrix) => {
   updateTextInputStyle(M)
   updateFf(M)
   updateFs(M)
+  dom.useFsInput.checked = M.font.useFs
+  dom.fsInput.disabled = !dom.useFsInput.checked
+  dom.useItalicInput.checked = M.font.useItalic
+  dom.useWeightInput.checked = M.font.useWeight
   dom.fwInput.value = M.font.fw
-  dom.fsItalicInput.checked = M.font.fsItalic
+  dom.fwInput.disabled = !dom.useWeightInput.checked
 
   dom.fontSizeInput.value = String(M.font.size)
   dom.fontSizeValue.innerHTML = String(M.font.size)

@@ -6,8 +6,10 @@ const q = <T extends Element = Element>(qs: string) =>
 const dom = {
   textInput: q<HTMLTextAreaElement>('.text-input'),
   ffInput: q<HTMLSelectElement>('.ff-input'),
+  useFsInput: q<HTMLInputElement>('.use-fs-input'),
   fsInput: q<HTMLSelectElement>('.fs-input'),
-  fsItalicInput: q<HTMLInputElement>('.fs-italic-input'),
+  useItalicInput: q<HTMLInputElement>('.use-italic-input'),
+  useWeightInput: q<HTMLInputElement>('.use-weight-input'),
   fwInput: q<HTMLSelectElement>('.fw-input'),
   localFontsButton: q<HTMLButtonElement>('.local-fonts-button'),
   fontSizeInput: q<HTMLInputElement>('.font-size-input'),

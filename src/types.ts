@@ -40,7 +40,9 @@ export interface IMetrix {
   font: {
     ff: string
     fs: string
-    fsItalic: boolean
+    useItalic: boolean
+    useWeight: boolean
+    useFs: boolean
     fw: Fw
     size: number
     lh: number

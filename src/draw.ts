@@ -30,7 +30,7 @@ const drawSync = (m: IMetrix) => {
     ctx.save()
     ctx.textAlign = m.font.align
     ctx.textBaseline = m.font.baseline
-    ctx.font = getFontString(m.font.size, m.font.fs, m.font.fw, m.font.fsItalic)
+    ctx.font = getFontString(m)
     ctx.fillText(line, dx, dy)
     const mets = ctx.measureText(line)
     ctx.restore()
@@ -134,12 +134,7 @@ const drawSync = (m: IMetrix) => {
     // measuring line text
     ctx.textAlign = 'center'
     ctx.textBaseline = 'bottom'
-    ctx.font = getFontString(
-      m.font.size / 2,
-      m.font.fs,
-      m.font.fw,
-      m.font.fsItalic,
-    )
+    ctx.font = getFontString(m, m.font.size / 2)
 
     const w = mets.actualBoundingBoxLeft + mets.actualBoundingBoxRight
     const horX = dx - mets.actualBoundingBoxLeft + w / 2

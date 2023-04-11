@@ -23,24 +23,32 @@
         <div class="font-style">
           <div>Font-style:</div>
           <div class="fs-browser-container">
-            <label title="Apply browser italic"
-              ><input type="checkbox" class="fs-italic-input" /> italic</label
-            >
-            <label title="Apply browser font-weight"
-              ><select class="fw-input">
+            <div>
+              <label title="Apply browser italic">
+                <input type="checkbox" class="use-italic-input" /> italic
+              </label>
+            </div>
+            <div>
+              <input
+                type="checkbox"
+                class="use-weight-input"
+                title="Apply browser font-weight"
+              />
+              <select class="fw-input">
                 <option value="100">100</option>
                 <option value="200">200</option>
                 <option value="300">300</option>
-                <option value="400">400</option>
+                <option value="400">400 (normal)</option>
                 <option value="500">500</option>
                 <option value="600">600</option>
-                <option value="700">700</option>
+                <option value="700">700 (bold)</option>
                 <option value="800">800</option>
                 <option value="900">900</option>
               </select>
-            </label>
+            </div>
           </div>
           <div>
+            <input type="checkbox" class="use-fs-input" />
             <select class="fs-input"></select>
           </div>
         </div>

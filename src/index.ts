@@ -18,8 +18,10 @@ const metrix: IMetrix = {
   text: 'my honest reaction 😅👌🏽',
   font: {
     fs: defFont[0].postscriptName,
-    fsItalic: false,
-    fw: Fw.w100,
+    useItalic: false,
+    useWeight: false,
+    useFs: true,
+    fw: Fw.w400,
     ff: defFf,
     size: 60,
     lh: 80,

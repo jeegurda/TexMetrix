@@ -23,14 +23,28 @@ const addEvents = (m: IMetrix) => {
     draw(m)
   })
 
+  dom.useFsInput.addEventListener('change', () => {
+    m.font.useFs = dom.useFsInput.checked
+    dom.fsInput.disabled = !dom.useFsInput.checked
+    updateTextInputStyle(m)
+    draw(m)
+  })
+
   dom.fsInput.addEventListener('change', () => {
     m.font.fs = dom.fsInput.value
     updateTextInputStyle(m)
     draw(m)
   })
 
-  dom.fsItalicInput.addEventListener('change', () => {
-    m.font.fsItalic = dom.fsItalicInput.checked
+  dom.useItalicInput.addEventListener('change', () => {
+    m.font.useItalic = dom.useItalicInput.checked
+    updateTextInputStyle(m)
+    draw(m)
+  })
+
+  dom.useWeightInput.addEventListener('change', () => {
+    m.font.useWeight = dom.useWeightInput.checked
+    dom.fwInput.disabled = !dom.useWeightInput.checked
     updateTextInputStyle(m)
     draw(m)
   })
