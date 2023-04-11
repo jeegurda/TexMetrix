@@ -1,7 +1,7 @@
 import { builtinFontData } from './common'
 import { dom } from './dom'
 import { draw, init } from './draw'
-import { Align, Baseline, FontData, IMetrix } from './types'
+import { Align, Baseline, FontData, Fw, IMetrix } from './types'
 import {
   updateCanvasRes,
   updateFf,
@@ -35,8 +35,8 @@ const addEvents = (m: IMetrix) => {
     draw(m)
   })
 
-  dom.fsBoldInput.addEventListener('change', () => {
-    m.font.fsBold = dom.fsBoldInput.checked
+  dom.fwInput.addEventListener('change', () => {
+    m.font.fw = validateEnumValue<Fw>(dom.fwInput.value, Fw)
     updateTextInputStyle(m)
     draw(m)
   })

@@ -30,7 +30,7 @@ const updateCanvasRes = (m: IMetrix) => {
 const updateTextInputStyle = (m: IMetrix) => {
   dom.textInput.style.fontFamily = m.font.fs
   dom.textInput.style.fontStyle = m.font.fsItalic ? 'italic' : 'normal'
-  dom.textInput.style.fontWeight = m.font.fsBold ? 'bold' : 'normal'
+  dom.textInput.style.fontWeight = m.font.fw
 }
 
 const updateFf = (m: IMetrix) => {
@@ -66,7 +66,7 @@ const updateDom = (M: IMetrix) => {
   updateTextInputStyle(M)
   updateFf(M)
   updateFs(M)
-  dom.fsBoldInput.checked = M.font.fsBold
+  dom.fwInput.value = M.font.fw
   dom.fsItalicInput.checked = M.font.fsItalic
 
   dom.fontSizeInput.value = String(M.font.size)

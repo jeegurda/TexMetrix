@@ -1,4 +1,4 @@
-import { Align, Baseline, BuiltinFontData, FontMap } from './types'
+import { Align, Baseline, BuiltinFontData, FontMap, Fw } from './types'
 
 const debounce = (fn: (...args: unknown[]) => unknown, delay: number) => {
   let t: null | number = null
@@ -42,12 +42,10 @@ const te: (msg?: string, err?: ErrorConstructor) => never = (
 const getFontString = (
   size: number,
   ff: string,
-  fsBold: boolean,
+  fw: Fw,
   fsItalic: boolean,
 ): string => {
-  return `${fsItalic ? 'italic' : 'normal'} ${
-    fsBold ? 'bold' : 'normal'
-  } ${size}px ${ff}`
+  return `${fsItalic ? 'italic' : 'normal'} ${fw} ${size}px ${ff}`
 }
 
 const getFonts = (fd: readonly BuiltinFontData[]) => {

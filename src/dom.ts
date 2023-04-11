@@ -8,7 +8,7 @@ const dom = {
   ffInput: q<HTMLSelectElement>('.ff-input'),
   fsInput: q<HTMLSelectElement>('.fs-input'),
   fsItalicInput: q<HTMLInputElement>('.fs-italic-input'),
-  fsBoldInput: q<HTMLSelectElement>('.fs-bold-input'),
+  fwInput: q<HTMLSelectElement>('.fw-input'),
   localFontsButton: q<HTMLButtonElement>('.local-fonts-button'),
   fontSizeInput: q<HTMLInputElement>('.font-size-input'),
   fontSizeValue: q<HTMLSpanElement>('.font-size-value'),

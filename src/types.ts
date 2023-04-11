@@ -23,13 +23,25 @@ export interface ILineStyle {
   display: boolean
 }
 
+export enum Fw {
+  w100 = '100',
+  w200 = '200',
+  w300 = '300',
+  w400 = '400',
+  w500 = '500',
+  w600 = '600',
+  w700 = '700',
+  w800 = '800',
+  w900 = '900',
+}
+
 export interface IMetrix {
   text: string
   font: {
     ff: string
     fs: string
     fsItalic: boolean
-    fsBold: boolean
+    fw: Fw
     size: number
     lh: number
     align: Align

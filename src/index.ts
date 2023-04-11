@@ -1,5 +1,5 @@
 import { checkTMInterface } from './support'
-import { Align, Baseline, IMetrix } from './types'
+import { Align, Baseline, Fw, IMetrix } from './types'
 import { dom } from './dom'
 import { addEvents } from './events'
 import { getFonts, te } from './utils'
@@ -19,7 +19,7 @@ const metrix: IMetrix = {
   font: {
     fs: defFont[0].postscriptName,
     fsItalic: false,
-    fsBold: false,
+    fw: Fw.w100,
     ff: defFf,
     size: 60,
     lh: 80,
