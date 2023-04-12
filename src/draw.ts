@@ -3,6 +3,7 @@ import { IMetrix } from './types'
 import { getFontString } from './utils'
 
 const init = (m: IMetrix) => {
+  // FIXME: safari gets wrong dimensions
   const ctx = m.props.shared.ctx
   const cw = ctx.canvas.clientWidth
   const ch = ctx.canvas.clientHeight
