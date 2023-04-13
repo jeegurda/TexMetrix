@@ -31,8 +31,8 @@ const metrix: IMetrix = {
   props: {
     rw: 0,
     rh: 0,
-    drawX: 100,
-    drawY: dom.canvas.clientHeight - 100,
+    drawX: 0,
+    drawY: 0,
     scaleMp: 1,
     rr: window.devicePixelRatio,
     style: {
@@ -49,10 +49,29 @@ const metrix: IMetrix = {
   },
 }
 
-init(metrix)
-draw(metrix)
+const setInitials = () => {
+  // Here goes whatever requires style's loaded state
 
-addEvents(metrix)
-updateDom(metrix)
+  metrix.props.drawX = 100
+  metrix.props.drawY = dom.canvas.clientHeight - 100
+}
+
+const initApp = () => {
+  setInitials()
+
+  init(metrix)
+  draw(metrix)
+
+  addEvents(metrix)
+  updateDom(metrix)
+}
 
 checkTMInterface()
+
+if (dom.mainCss.sheet) {
+  initApp()
+} else {
+  // Stylesheet can be NOT loaded yet, this happens in Safari only
+  // expect 'sheet' to be undefined
+  dom.mainCss.addEventListener('load', initApp)
+}

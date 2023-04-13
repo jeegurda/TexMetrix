@@ -10,7 +10,7 @@ const checkTMInterface = () => {
     'fontBoundingBoxAscent',
     'fontBoundingBoxDescent',
 
-    'emHeightAscent',
+    'emHeightAscent', // same as font
     'emHeightDescent',
 
     'alphabeticBaseline',
