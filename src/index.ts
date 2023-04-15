@@ -39,6 +39,9 @@ const metrix: IMetrix = {
       blAlign: { color: '#c800c8', width: 0.5, display: true },
       fontBb: { color: '#f00000', width: 0.5, display: true },
       actualBb: { color: '#000000', width: 0.5, display: true },
+      alphabeticBl: { display: false },
+      hangingBl: { display: false },
+      ideographicBl: { display: false },
     },
     shared: {
       cw: 0,
@@ -64,9 +67,9 @@ const initApp = () => {
 
   addEvents(metrix)
   updateDom(metrix)
-}
 
-checkTMInterface()
+  checkTMInterface()
+}
 
 if (dom.mainCss.sheet) {
   initApp()

@@ -46,6 +46,15 @@ const dom = {
       width: q<HTMLInputElement>('.actual-width-input'),
       display: q<HTMLInputElement>('.actual-display-input'),
     },
+    alphabeticBl: {
+      display: q<HTMLInputElement>('.alphabetic-bl-display-input'),
+    },
+    hangingBl: {
+      display: q<HTMLInputElement>('.hanging-bl-display-input'),
+    },
+    ideographicBl: {
+      display: q<HTMLInputElement>('.ideographic-bl-display-input'),
+    },
   },
 } as const
 

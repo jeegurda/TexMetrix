@@ -1,5 +1,5 @@
-import { mlOffset, mtOffset } from './common'
-import { IMetrix } from './types'
+import { addBlProps, mlOffset, mtOffset } from './common'
+import { IExtendedTextMetrics, IMetrix } from './types'
 import { getFontString } from './utils'
 
 const init = (m: IMetrix) => {
@@ -26,13 +26,17 @@ const drawSync = (m: IMetrix) => {
     shared: { ctx },
   } = m.props
 
-  const drawText = (line: string, dx: number, dy: number): TextMetrics => {
+  const drawText = (
+    line: string,
+    dx: number,
+    dy: number,
+  ): IExtendedTextMetrics => {
     ctx.save()
     ctx.textAlign = m.font.align
     ctx.textBaseline = m.font.baseline
     ctx.font = getFontString(m)
     ctx.fillText(line, dx, dy)
-    const mets = ctx.measureText(line)
+    const mets = ctx.measureText(line) as IExtendedTextMetrics
     ctx.restore()
 
     return mets
@@ -71,7 +75,6 @@ const drawSync = (m: IMetrix) => {
     ctx.save()
     ctx.strokeStyle = m.props.style.fontBb.color
     ctx.lineWidth = m.props.style.fontBb.width
-    // ctx.setLineDash([6 / M.props.scaleMp, 3 / M.props.scaleMp])
     ctx.stroke(fPath)
     ctx.restore()
   }
@@ -164,6 +167,28 @@ const drawSync = (m: IMetrix) => {
     lastMLYTop = horY - m.font.size / 2
   }
 
+  const drawAdditionalBl = (
+    idx: number,
+    mets: IExtendedTextMetrics,
+    dx: number,
+    dy: number,
+  ) => {
+    addBlProps.forEach(({ dProp, mProp }) => {
+      if (!m.props.style[dProp].display) {
+        return
+      }
+      const blPath = new Path2D()
+      blPath.moveTo(0, dy - (mets[mProp] || 0))
+      blPath.lineTo(rw, dy - (mets[mProp] || 0))
+
+      ctx.save()
+      ctx.strokeStyle = m.props.style.blAlign.color
+      ctx.lineWidth = m.props.style.blAlign.width
+      ctx.stroke(blPath)
+      ctx.restore()
+    })
+  }
+
   ctx.clearRect(0, 0, rw, rh)
 
   const lines = m.text.split('\n')
@@ -179,6 +204,8 @@ const drawSync = (m: IMetrix) => {
     m.props.style.blAlign.display && drawBlAlign(idx, dx, dy)
     m.props.style.fontBb.display && drawFontBb(idx, mets, dx, dy)
     m.props.style.actualBb.display && drawActualBb(idx, mets, dx, dy)
+
+    drawAdditionalBl(idx, mets, dx, dy)
     ctx.restore() // restore alpha
 
     m.props.style.actualBb.display && drawMl(idx, mets, dx, dy)

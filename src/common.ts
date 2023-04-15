@@ -23,3 +23,9 @@ export const builtinFontData: readonly BuiltinFontData[] = [
 
 export const mlOffset = 30
 export const mtOffset = 10
+
+export const addBlProps = [
+  { dProp: 'alphabeticBl', mProp: 'alphabeticBaseline' },
+  { dProp: 'ideographicBl', mProp: 'ideographicBaseline' },
+  { dProp: 'hangingBl', mProp: 'hangingBaseline' },
+] as const

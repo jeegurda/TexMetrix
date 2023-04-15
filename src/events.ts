@@ -142,6 +142,15 @@ const addEvents = (m: IMetrix) => {
     })
   })
 
+  const blStyleProps = ['alphabeticBl', 'hangingBl', 'ideographicBl'] as const
+
+  blStyleProps.forEach((prop) => {
+    dom.lineStyle[prop].display.addEventListener('input', () => {
+      m.props.style[prop].display = dom.lineStyle[prop].display.checked
+      draw(m)
+    })
+  })
+
   dom.canvasUi.addEventListener('contextmenu', (ev) => {
     ev.preventDefault()
   })

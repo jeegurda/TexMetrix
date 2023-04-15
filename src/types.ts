@@ -23,6 +23,10 @@ export interface ILineStyle {
   display: boolean
 }
 
+export interface IAdditionalBlStyle {
+  display: boolean
+}
+
 export enum Fw {
   w100 = '100',
   w200 = '200',
@@ -63,6 +67,9 @@ export interface IMetrix {
       actualBb: ILineStyle
       fontBb: ILineStyle
       blAlign: ILineStyle
+      alphabeticBl: IAdditionalBlStyle
+      hangingBl: IAdditionalBlStyle
+      ideographicBl: IAdditionalBlStyle
     }
 
     shared: {
@@ -97,4 +104,11 @@ export interface IFont {
 
 export type FontMap = {
   [key: string]: IFont[] | undefined
+}
+
+// Manually extend TM interface with safari-only props
+export interface IExtendedTextMetrics extends TextMetrics {
+  alphabeticBaseline?: number
+  hangingBaseline?: number
+  ideographicBaseline?: number
 }

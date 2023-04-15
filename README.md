@@ -19,5 +19,4 @@ $ npm run serve  # runs at http://localhost:8000
 
 ### todo:
 
-- add safari-supported props
 - add pointer events on touch

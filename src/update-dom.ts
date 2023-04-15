@@ -94,6 +94,22 @@ const updateDom = (M: IMetrix) => {
   dom.lineStyle.actualBb.color.value = M.props.style.actualBb.color
   dom.lineStyle.actualBb.width.value = String(M.props.style.actualBb.width)
   dom.lineStyle.actualBb.display.checked = M.props.style.actualBb.display
+
+  dom.lineStyle.alphabeticBl.display.disabled = !(
+    'alphabeticBaseline' in TextMetrics.prototype
+  )
+  dom.lineStyle.hangingBl.display.disabled = !(
+    'hangingBaseline' in TextMetrics.prototype
+  )
+  dom.lineStyle.ideographicBl.display.disabled = !(
+    'ideographicBaseline' in TextMetrics.prototype
+  )
+
+  dom.lineStyle.alphabeticBl.display.checked =
+    M.props.style.alphabeticBl.display
+  dom.lineStyle.ideographicBl.display.checked =
+    M.props.style.ideographicBl.display
+  dom.lineStyle.hangingBl.display.checked = M.props.style.hangingBl.display
 }
 
 export { updateDom, updateCanvasRes, updateTextInputStyle, updateFf, updateFs }
