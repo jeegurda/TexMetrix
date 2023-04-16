@@ -1,6 +1,7 @@
 import { builtinFontData } from './common'
 import { dom } from './dom'
 import { draw, init } from './draw'
+import { addMove } from './move'
 import { Align, Baseline, FontData, Fw, IMetrix } from './types'
 import {
   updateCanvasRes,
@@ -151,95 +152,50 @@ const addEvents = (m: IMetrix) => {
     })
   })
 
-  dom.canvasUi.addEventListener('contextmenu', (ev) => {
-    ev.preventDefault()
-  })
-
+  // Overall scale (zoom) level, stored as a linear value
   let scaleLin = 0
 
-  dom.canvasUi.addEventListener('wheel', (ev) => {
-    ev.preventDefault()
+  addMove({
+    ui: dom.canvasUi,
+    onDown: () => {
+      dom.canvasUi.classList.add('grabbing')
+    },
+    onMove: (dx, dy) => {
+      m.props.drawX += dx / m.props.scaleMp
+      m.props.drawY += dy / m.props.scaleMp
 
-    // auto-set when pinching on os x
-    if (ev.ctrlKey) {
-      scaleLin += -ev.deltaY / 100
+      draw(m)
+    },
+    onUp: () => {
+      dom.canvasUi.classList.remove('grabbing')
+    },
+    onWheel: (dx, dy, evt) => {
+      // auto-set when pinching on os x
+      if (evt.ctrlKey) {
+        scaleLin += -dy / 100
 
-      const scaleExp = Math.pow(1.4, scaleLin)
+        const scaleExp = Math.pow(1.4, scaleLin)
 
-      m.props.scaleMp = scaleExp
+        m.props.scaleMp = scaleExp
 
-      dom.zoomValue.innerHTML = m.props.scaleMp.toFixed(2)
+        dom.zoomValue.innerHTML = m.props.scaleMp.toFixed(2)
 
-      const xBefore = m.props.rw * (ev.offsetX / m.props.shared.cw)
-      const yBefore = m.props.rh * (ev.offsetY / m.props.shared.ch)
+        const xBefore = m.props.rw * (evt.offsetX / m.props.shared.cw)
+        const yBefore = m.props.rh * (evt.offsetY / m.props.shared.ch)
 
-      init(m)
+        init(m)
 
-      const xAfter = m.props.rw * (ev.offsetX / m.props.shared.cw)
-      const yAfter = m.props.rh * (ev.offsetY / m.props.shared.ch)
+        const xAfter = m.props.rw * (evt.offsetX / m.props.shared.cw)
+        const yAfter = m.props.rh * (evt.offsetY / m.props.shared.ch)
 
-      m.props.drawX += xAfter - xBefore
-      m.props.drawY += yAfter - yBefore
-    } else {
-      const dx = ev.deltaX / m.props.scaleMp
-      const dy = ev.deltaY / m.props.scaleMp
-
-      m.props.drawX -= dx
-      m.props.drawY -= dy
-    }
-    draw(m)
-  })
-
-  let eventsAdded = false
-  let downX: number
-  let downY: number
-  let origDrawX: number
-  let origDrawY: number
-
-  const handleUp = () => {
-    dom.canvasUi.classList.remove('grabbing')
-    removeMoveEvents()
-  }
-
-  const handleMove = (evt: MouseEvent) => {
-    if (evt.buttons === 0) {
-      // ok to happen once on button release, otherwise user input sequence was somehow broken
-      // therefore remove events manually
-      handleUp()
-      return
-    }
-    evt.preventDefault()
-    m.props.drawX = origDrawX + (evt.clientX - downX) / m.props.scaleMp
-    m.props.drawY = origDrawY + (evt.clientY - downY) / m.props.scaleMp
-    draw(m)
-  }
-
-  const addMoveEvents = () => {
-    if (eventsAdded) {
-      console.warn('Events already exist')
-      return
-    }
-    window.addEventListener('mousemove', handleMove)
-    window.addEventListener('mouseup', handleUp)
-    eventsAdded = true
-  }
-
-  const removeMoveEvents = () => {
-    window.removeEventListener('mousemove', handleMove)
-    window.removeEventListener('mouseup', handleUp)
-    eventsAdded = false
-  }
-
-  dom.canvasUi.addEventListener('mousedown', (ev) => {
-    ev.preventDefault()
-    dom.canvasUi.classList.add('grabbing')
-
-    downX = ev.clientX
-    downY = ev.clientY
-    origDrawX = m.props.drawX
-    origDrawY = m.props.drawY
-
-    addMoveEvents()
+        m.props.drawX += xAfter - xBefore
+        m.props.drawY += yAfter - yBefore
+      } else {
+        m.props.drawX -= dx / m.props.scaleMp
+        m.props.drawY -= dy / m.props.scaleMp
+      }
+      draw(m)
+    },
   })
 }
 
