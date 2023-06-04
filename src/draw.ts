@@ -35,6 +35,7 @@ const drawSync = (m: IMetrix) => {
     ctx.textAlign = m.font.align
     ctx.textBaseline = m.font.baseline
     ctx.font = getFontString(m)
+    ctx.fillStyle = m.props.shared.colors.text || ''
     ctx.fillText(line, dx, dy)
     const mets = ctx.measureText(line) as IExtendedTextMetrics
     ctx.restore()
@@ -126,7 +127,7 @@ const drawSync = (m: IMetrix) => {
     p.moveTo(verMLx, dy - mets.actualBoundingBoxAscent)
     p.lineTo(verMLx, dy + mets.actualBoundingBoxDescent)
 
-    ctx.save()
+    ctx.save() // main save
     ctx.strokeStyle = m.props.style.actualBb.color
     ctx.lineWidth = m.props.style.actualBb.width
     ctx.save() // save before alpha
@@ -142,6 +143,8 @@ const drawSync = (m: IMetrix) => {
     const w = mets.actualBoundingBoxLeft + mets.actualBoundingBoxRight
     const horX = dx - mets.actualBoundingBoxLeft + w / 2
     const horY = horMLY - totalMtOffset
+    ctx.save() // save before text fill
+    ctx.fillStyle = m.props.shared.colors.text || ''
     ctx.fillText(`${w.toFixed(1)}px`, horX, horY)
 
     const h = mets.actualBoundingBoxAscent + mets.actualBoundingBoxDescent
@@ -161,7 +164,8 @@ const drawSync = (m: IMetrix) => {
       dx - totalMtOffset,
       dy,
     )
-    ctx.restore() // restore rest
+    ctx.restore() // restore text
+    ctx.restore() // main restore
 
     // top point of text above hor line
     lastMLYTop = horY - m.font.size / 2

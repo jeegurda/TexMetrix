@@ -29,3 +29,8 @@ export const addBlProps = [
   { dProp: 'ideographicBl', mProp: 'ideographicBaseline' },
   { dProp: 'hangingBl', mProp: 'hangingBaseline' },
 ] as const
+
+export const colors = {
+  background: '#202020',
+  color: '#cecece',
+}

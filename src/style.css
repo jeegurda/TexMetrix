@@ -1,6 +1,32 @@
+@media (prefers-color-scheme: light) {
+  :root {
+    --c-text: #202020;
+    --c-bg: #fff;
+
+    --c-section-border: rgba(0, 0, 0, 0.2);
+    --c-grid-border: rgba(0, 0, 0, 0.2);
+
+    color-scheme: light;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --c-bg: #202020;
+    --c-text: #cecece;
+
+    --c-section-border: rgba(255, 255, 255, 0.1);
+    --c-grid-border: rgba(255, 255, 255, 0.1);
+
+    color-scheme: dark;
+  }
+}
+
 body {
   margin: 0;
   font: 16px sans-serif;
+  background: var(--c-bg);
+  color: var(--c-text);
 }
 
 .layout {
@@ -14,6 +40,8 @@ body {
 .text-parameters {
   grid: auto / auto;
   display: grid;
+  overflow: auto;
+  max-height: 100%;
 }
 
 .text-parameters > div:first-child {
@@ -29,7 +57,7 @@ body {
 }
 
 .text-parameters > div:nth-child(even) {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid var(--c-section-border);
 }
 
 .text-input {
@@ -68,8 +96,8 @@ body {
 }
 
 .canvas {
-  border-left: 1px solid rgba(0, 0, 0, 0.4);
-  border-right: 1px solid rgba(0, 0, 0, 0.4);
+  border-left: 1px solid var(--c-grid-border);
+  border-right: 1px solid var(--c-grid-border);
   align-self: stretch;
   overflow: hidden;
   position: relative;
@@ -97,6 +125,8 @@ body {
 .canvas-parameters {
   display: grid;
   grid: auto / auto;
+  overflow: auto;
+  max-height: 100%;
 }
 
 .canvas-parameters > div:first-child {

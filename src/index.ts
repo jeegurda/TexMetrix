@@ -6,6 +6,7 @@ import { getFonts, te } from './utils'
 import { updateDom } from './update-dom'
 import { builtinFontData } from './common'
 import { draw, init } from './draw'
+import './style.css'
 
 const ctx = dom.canvas.getContext('2d') ?? te('ctx died')
 
@@ -36,9 +37,9 @@ const metrix: IMetrix = {
     scaleMp: 1,
     rr: window.devicePixelRatio,
     style: {
-      blAlign: { color: '#c800c8', width: 0.5, display: true },
-      fontBb: { color: '#f00000', width: 0.5, display: true },
-      actualBb: { color: '#000000', width: 0.5, display: true },
+      blAlign: { color: '#c800c8', width: 1, display: true },
+      fontBb: { color: '#f00000', width: 1.5, display: true },
+      actualBb: { color: '#ffffff', width: 0.5, display: true },
       alphabeticBl: { display: false },
       hangingBl: { display: false },
       ideographicBl: { display: false },
@@ -48,6 +49,7 @@ const metrix: IMetrix = {
       ch: 0,
       fm,
       ctx,
+      colors: {},
     },
   },
 }
@@ -57,6 +59,22 @@ const setInitials = () => {
 
   metrix.props.drawX = 100
   metrix.props.drawY = dom.canvas.clientHeight - 100
+
+  const getValue = (cssVar: string) => {
+    const value = getComputedStyle(document.documentElement).getPropertyValue(
+      cssVar,
+    )
+
+    if (value === '') {
+      console.warn(`CSS var "${cssVar}" not set`)
+    }
+    return value
+  }
+
+  metrix.props.shared.colors = {
+    text: getValue('--c-text'),
+    bg: getValue('--c-bg'),
+  }
 }
 
 const initApp = () => {

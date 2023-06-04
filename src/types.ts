@@ -77,6 +77,9 @@ export interface IMetrix {
       ch: number
       fm: FontMap
       ctx: CanvasRenderingContext2D
+      colors: {
+        [key: string]: string | undefined
+      }
     }
   }
 }
