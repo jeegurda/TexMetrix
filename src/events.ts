@@ -6,6 +6,7 @@ import { addMove } from './move'
 import { Align, Baseline, FontData, Fw, IMetrix } from './types'
 import {
   updateCanvasRes,
+  updateDom,
   updateFf,
   updateFs,
   updateTextInputStyle,
@@ -204,6 +205,12 @@ const addEvents = (m: IMetrix) => {
       'light-only',
       dom.disableDarkTheme.checked,
     )
+
+    m.props.style.actualBb.color = dom.disableDarkTheme.checked
+      ? '#000000'
+      : '#ffffff'
+
+    updateDom(m)
 
     setColors(m)
     draw(m)
