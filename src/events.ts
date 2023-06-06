@@ -1,6 +1,7 @@
 import { builtinFontData } from './common'
 import { dom } from './dom'
 import { draw, init } from './draw'
+import { setColors } from './initials'
 import { addMove } from './move'
 import { Align, Baseline, FontData, Fw, IMetrix } from './types'
 import {
@@ -196,6 +197,16 @@ const addEvents = (m: IMetrix) => {
       }
       draw(m)
     },
+  })
+
+  dom.disableDarkTheme.addEventListener('change', () => {
+    document.documentElement.classList.toggle(
+      'light-only',
+      dom.disableDarkTheme.checked,
+    )
+
+    setColors(m)
+    draw(m)
   })
 }
 

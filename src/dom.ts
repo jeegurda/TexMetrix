@@ -56,6 +56,8 @@ const dom = {
       display: q<HTMLInputElement>('.ideographic-bl-display-input'),
     },
   },
+
+  disableDarkTheme: q<HTMLInputElement>('.disable-dark-theme-input'),
 } as const
 
 export { dom }

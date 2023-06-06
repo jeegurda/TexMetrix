@@ -7,6 +7,7 @@ import { updateDom } from './update-dom'
 import { builtinFontData } from './common'
 import { draw, init } from './draw'
 import './style.css'
+import { setColors, setInitials } from './initials'
 
 const ctx = dom.canvas.getContext('2d') ?? te('ctx died')
 
@@ -54,31 +55,9 @@ const metrix: IMetrix = {
   },
 }
 
-const setInitials = () => {
-  // Here goes whatever requires style's loaded state
-
-  metrix.props.drawX = 100
-  metrix.props.drawY = dom.canvas.clientHeight - 100
-
-  const getValue = (cssVar: string) => {
-    const value = getComputedStyle(document.documentElement).getPropertyValue(
-      cssVar,
-    )
-
-    if (value === '') {
-      console.warn(`CSS var "${cssVar}" not set`)
-    }
-    return value
-  }
-
-  metrix.props.shared.colors = {
-    text: getValue('--c-text'),
-    bg: getValue('--c-bg'),
-  }
-}
-
 const initApp = () => {
-  setInitials()
+  setInitials(metrix)
+  setColors(metrix)
 
   init(metrix)
   draw(metrix)

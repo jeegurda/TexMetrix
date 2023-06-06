@@ -17,7 +17,9 @@
 
     --c-section-border: rgba(255, 255, 255, 0.1);
     --c-grid-border: rgba(255, 255, 255, 0.1);
+  }
 
+  :root:not(.light-only) {
     color-scheme: dark;
   }
 }
