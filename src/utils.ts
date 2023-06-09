@@ -1,3 +1,4 @@
+import { dom } from './dom'
 import { BuiltinFontData, FontMap, IMetrix } from './types'
 
 const debounce = (fn: (...args: unknown[]) => unknown, delay: number) => {
@@ -74,4 +75,20 @@ const getFonts = (fd: readonly BuiltinFontData[]) => {
   return fontMap
 }
 
-export { debounce, validateEnumValue, te, getFontString, getFonts }
+const getCssVarValue = (cssVar: string) => {
+  const value = getComputedStyle(dom.document).getPropertyValue(cssVar)
+
+  if (value === '') {
+    console.warn(`CSS var "${cssVar}" not set`)
+  }
+  return value
+}
+
+export {
+  debounce,
+  validateEnumValue,
+  te,
+  getFontString,
+  getFonts,
+  getCssVarValue,
+}

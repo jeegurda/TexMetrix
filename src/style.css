@@ -1,3 +1,4 @@
+/* Media rules to prevent color flashes */
 @media (prefers-color-scheme: light) {
   :root {
     --c-text: #202020;
@@ -11,7 +12,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root:not(.light-only) {
+  :root {
     --c-bg: #202020;
     --c-text: #cecece;
 
@@ -20,16 +21,27 @@
 
     color-scheme: dark;
   }
+}
 
-  :root.light-only {
-    --c-text: #202020;
-    --c-bg: #fff;
+/* Class rules for js control */
+:root.light {
+  --c-text: #202020;
+  --c-bg: #fff;
 
-    --c-section-border: rgba(0, 0, 0, 0.2);
-    --c-grid-border: rgba(0, 0, 0, 0.2);
+  --c-section-border: rgba(0, 0, 0, 0.2);
+  --c-grid-border: rgba(0, 0, 0, 0.2);
 
-    color-scheme: light;
-  }
+  color-scheme: light;
+}
+
+:root.dark {
+  --c-bg: #202020;
+  --c-text: #cecece;
+
+  --c-section-border: rgba(255, 255, 255, 0.1);
+  --c-grid-border: rgba(255, 255, 255, 0.1);
+
+  color-scheme: dark;
 }
 
 body {

@@ -4,6 +4,7 @@ const q = <T extends Element = Element>(qs: string) =>
   document.querySelector<T>(qs) ?? te(`dom el missing (selector: ${qs})`)
 
 const dom = {
+  document: document.documentElement,
   mainCss: q<HTMLLinkElement>('.main-css'),
 
   textInput: q<HTMLTextAreaElement>('.text-input'),

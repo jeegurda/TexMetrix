@@ -201,19 +201,9 @@ const addEvents = (m: IMetrix) => {
   })
 
   dom.disableDarkTheme.addEventListener('change', () => {
-    document.documentElement.classList.toggle(
-      'light-only',
-      dom.disableDarkTheme.checked,
-    )
-
-    m.props.style.actualBb.color = dom.disableDarkTheme.checked
-      ? '#000000'
-      : '#ffffff'
-
-    updateDom(m)
-
     setColors(m)
-    draw(m)
+    updateDom(m) // update color inputs
+    draw(m) // update canvas
   })
 }
 
