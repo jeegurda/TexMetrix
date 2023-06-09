@@ -210,10 +210,13 @@ const addEvents = (m: IMetrix) => {
     updateTheme()
   })
 
+  const updateOnMatch = (target: MediaQueryList) =>
+    target.matches && updateTheme()
+
   matchMedia('(prefers-color-scheme: dark)').onchange = (ev) =>
-    (ev.target as MediaQueryList).matches && updateTheme()
+    updateOnMatch(ev.target as MediaQueryList)
   matchMedia('(prefers-color-scheme: light)').onchange = (ev) =>
-    (ev.target as MediaQueryList).matches && updateTheme()
+    updateOnMatch(ev.target as MediaQueryList)
 }
 
 export { addEvents }
