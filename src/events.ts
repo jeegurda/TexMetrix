@@ -200,11 +200,20 @@ const addEvents = (m: IMetrix) => {
     },
   })
 
-  dom.disableDarkTheme.addEventListener('change', () => {
+  const updateTheme = () => {
     setColors(m)
     updateDom(m) // update color inputs
     draw(m) // update canvas
+  }
+
+  dom.disableDarkTheme.addEventListener('change', () => {
+    updateTheme()
   })
+
+  matchMedia('(prefers-color-scheme: dark)').onchange = (ev) =>
+    (ev.target as MediaQueryList).matches && updateTheme()
+  matchMedia('(prefers-color-scheme: light)').onchange = (ev) =>
+    (ev.target as MediaQueryList).matches && updateTheme()
 }
 
 export { addEvents }
