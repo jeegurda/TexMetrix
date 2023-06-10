@@ -115,3 +115,8 @@ export interface IExtendedTextMetrics extends TextMetrics {
   hangingBaseline?: number
   ideographicBaseline?: number
 }
+
+export enum Theme {
+  DARK = 'dark',
+  LIGHT = 'light',
+}

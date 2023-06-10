@@ -1,5 +1,5 @@
 import { dom } from './dom'
-import { IMetrix } from './types'
+import { IMetrix, Theme } from './types'
 import { getCssVarValue } from './utils'
 
 export const setInitials = (m: IMetrix) => {
@@ -10,17 +10,11 @@ export const setInitials = (m: IMetrix) => {
 }
 
 export const setColors = (m: IMetrix) => {
-  let theme: 'dark' | 'light' = 'dark'
-
   const prefersLight =
     dom.disableDarkTheme.checked ||
     matchMedia('(prefers-color-scheme: light)').matches
 
-  if (prefersLight) {
-    theme = 'light'
-  } else {
-    theme = 'dark'
-  }
+  const theme = prefersLight ? Theme.LIGHT : Theme.DARK
 
   dom.document.classList.toggle('light', prefersLight)
   dom.document.classList.toggle('dark', !prefersLight)
@@ -30,5 +24,5 @@ export const setColors = (m: IMetrix) => {
     bg: getCssVarValue('--c-bg'),
   }
 
-  m.props.style.actualBb.color = theme === 'light' ? '#000000' : '#ffffff'
+  m.props.style.actualBb.color = theme === Theme.LIGHT ? '#000000' : '#ffffff'
 }
