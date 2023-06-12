@@ -110,7 +110,7 @@
         <div>Zoom: <span class="zoom-value">0</span></div>
         <div>
           <div>Baseline/align:</div>
-          <div>
+          <div class="color-inputs">
             <input type="color" class="bl-align-color-input" />
             <input
               type="number"
@@ -124,7 +124,7 @@
         </div>
         <div>
           <div>Font bounding box:</div>
-          <div>
+          <div class="color-inputs">
             <input type="color" class="font-color-input" />
             <input
               type="number"
@@ -138,7 +138,7 @@
         </div>
         <div>
           <div>Actual bounding box:</div>
-          <div>
+          <div class="color-inputs">
             <input type="color" class="actual-color-input" />
             <input
               type="number"
@@ -176,5 +176,16 @@
         </div>
       </div>
     </div>
+    <dialog class="info-modal">
+      <form method="dialog">
+        <p class="info-modal-support" hidden>
+          Local fonts not supported. Try Chrome.
+        </p>
+        <p class="info-modal-permission" hidden>
+          Permission denied. Allow loading fonts and try again.
+        </p>
+        <button type="submit">OK</button>
+      </form>
+    </dialog>
   </body>
 </html>

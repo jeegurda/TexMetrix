@@ -163,3 +163,13 @@ body {
 .canvas-parameters > div:last-child {
   padding: 5px 20px 5px;
 }
+
+.color-inputs {
+  display: grid;
+  grid: auto / 1fr 50px auto;
+  align-items: stretch;
+}
+
+.info-modal::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}

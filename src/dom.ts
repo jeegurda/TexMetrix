@@ -3,6 +3,14 @@ import { te } from './utils'
 const q = <T extends Element = Element>(qs: string) =>
   document.querySelector<T>(qs) ?? te(`dom el missing (selector: ${qs})`)
 
+const qa = <T extends Element = Element>(qs: string) => {
+  const nl = document.querySelectorAll<T>(qs)
+
+  return nl.length
+    ? Array.from(nl)
+    : te(`dom els missing (all selector: ${qs})`)
+}
+
 const dom = {
   document: document.documentElement,
   mainCss: q<HTMLLinkElement>('.main-css'),
@@ -59,6 +67,10 @@ const dom = {
   },
 
   disableDarkTheme: q<HTMLInputElement>('.disable-dark-theme-input'),
+  infoModal: q<HTMLDialogElement>('.info-modal'),
+  infoModalSupport: q<HTMLDialogElement>('.info-modal-support'),
+  infoModalPermission: q<HTMLDialogElement>('.info-modal-permission'),
+  infoModalTexts: qa<HTMLParagraphElement>('.info-modal p'),
 } as const
 
 export { dom }

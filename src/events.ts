@@ -70,9 +70,8 @@ const addEvents = (m: IMetrix) => {
         .queryLocalFonts()
         .then((data: FontData[]) => {
           if (data.length === 0) {
-            console.warn(
-              'Empty array, permission denied. Enable manually in browser',
-            )
+            dom.infoModalPermission.hidden = false
+            dom.infoModal.showModal()
           } else {
             updateLocalFonts(data)
           }
@@ -81,8 +80,13 @@ const addEvents = (m: IMetrix) => {
           console.error('Local fonts query failed: %o', reason)
         })
     } else {
-      console.warn('Local fonts not supported')
+      dom.infoModalSupport.hidden = false
+      dom.infoModal.showModal()
     }
+  })
+
+  dom.infoModal.addEventListener('close', () => {
+    dom.infoModalTexts.forEach((el) => (el.hidden = true))
   })
 
   dom.fontSizeInput.addEventListener('input', () => {
