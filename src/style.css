@@ -166,8 +166,13 @@ body {
 
 .color-inputs {
   display: grid;
-  grid: auto / 1fr 50px auto;
-  align-items: stretch;
+  grid: auto / 70px 50px 30px;
+  column-gap: 10px;
+  align-items: center;
+}
+
+.color-inputs div input {
+  width: 100%;
 }
 
 .info-modal::backdrop {
